@@ -1,6 +1,7 @@
-import { createFileRoute, Link, notFound } from "@tanstack/react-router";
+import { createFileRoute, Link, notFound, type ErrorComponentProps } from "@tanstack/react-router";
 import { Button } from "@/components/ui/button";
-import { properties, waLink } from "@/data/properties";
+import { properties } from "@/data/properties";
+import { PropertyDetail } from "@/components/site/PropertyDetail";
 
 export const Route = createFileRoute("/propiedad/$slug")({
   loader: ({ params }) => {
@@ -8,31 +9,57 @@ export const Route = createFileRoute("/propiedad/$slug")({
     if (!p) throw notFound();
     return p;
   },
-  head: ({ loaderData }) => ({
-    meta: loaderData
-      ? [
-          { title: `${loaderData.name} · Toto Partner Inmobiliario` },
-          { name: "description", content: `${loaderData.name}, ${loaderData.location}. ${loaderData.areaLabel}.` },
-          { property: "og:title", content: loaderData.name },
-          { property: "og:description", content: `${loaderData.location} · ${loaderData.areaLabel}` },
-        ]
-      : [{ title: "Propiedad no disponible" }, { name: "robots", content: "noindex" }],
-  }),
+  head: ({ loaderData: p }) => {
+    if (!p) return { meta: [{ title: "Propiedad no disponible | Toto Partner Inmobiliario" }, { name: "robots", content: "noindex" }] };
+    const title = `${p.name} · ${p.municipality} | Toto Partner Inmobiliario`;
+    const ld: Record<string, unknown> = {
+      "@context": "https://schema.org",
+      "@type": ["RealEstateListing", "Product"],
+      name: p.name,
+      description: p.summary,
+      image: p.cover,
+      address: { "@type": "PostalAddress", addressLocality: p.municipality, streetAddress: p.location, addressCountry: "CO" },
+    };
+    if (p.priceCOP) ld.offers = { "@type": "Offer", price: p.priceCOP, priceCurrency: "COP", availability: "https://schema.org/InStock" };
+    return {
+      meta: [
+        { title },
+        { name: "description", content: p.summary },
+        { property: "og:title", content: title },
+        { property: "og:description", content: p.summary },
+        { property: "og:type", content: "website" },
+        { property: "og:image", content: p.cover },
+        { name: "twitter:image", content: p.cover },
+      ],
+      scripts: [{ type: "application/ld+json", children: JSON.stringify(ld) }],
+    };
+  },
   component: PropertyPage,
+  notFoundComponent: NotFoundProperty,
+  errorComponent: ErrorProperty,
 });
 
 function PropertyPage() {
   const p = Route.useLoaderData();
+  return <PropertyDetail key={p.slug} p={p} />;
+}
+
+function NotFoundProperty() {
   return (
-    <section className="container-site py-24">
-      <p className="eyebrow mb-3">{p.tag}</p>
-      <h1 className="text-5xl">{p.name}</h1>
-      <p className="mt-3 text-muted-foreground">{p.location} · <span className="font-mono">{p.areaLabel}</span></p>
-      <p className="mt-8 text-muted-foreground">Ficha completa próximamente.</p>
-      <div className="mt-8 flex gap-3">
-        <Button asChild><a href={waLink(`Hola Toto, me interesa ${p.name}.`)} target="_blank" rel="noreferrer">Escribir a Toto</a></Button>
-        <Button asChild variant="outline"><Link to="/">Volver al portafolio</Link></Button>
-      </div>
+    <section className="container-site flex min-h-[60vh] flex-col items-center justify-center py-24 text-center">
+      <p className="eyebrow">Propiedad no encontrada</p>
+      <h1 className="mt-4 text-5xl md:text-6xl">Este lote ya no está en el portafolio</h1>
+      <p className="mt-4 max-w-md text-muted-foreground">Puede que se haya vendido o que el enlace haya cambiado. Vea las propiedades disponibles.</p>
+      <Button asChild className="mt-8"><Link to="/" hash="propiedades">Ver el portafolio</Link></Button>
+    </section>
+  );
+}
+
+function ErrorProperty({ reset }: ErrorComponentProps) {
+  return (
+    <section className="container-site py-24 text-center">
+      <h1 className="text-4xl">No pudimos cargar esta propiedad</h1>
+      <Button className="mt-6" onClick={reset}>Intentar de nuevo</Button>
     </section>
   );
 }

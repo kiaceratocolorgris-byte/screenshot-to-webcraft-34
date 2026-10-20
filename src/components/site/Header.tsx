@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { Menu, X, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { waLink } from "@/data/properties";
+import { whatsappLink as waLink } from "@/data/properties";
 
 const NAV = [
   ["Propiedades", "propiedades"],

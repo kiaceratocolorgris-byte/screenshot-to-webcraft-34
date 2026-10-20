@@ -1,21 +1,22 @@
 import { useState } from "react";
 import { Button } from "@/components/ui/button";
 import { images } from "@/data/images";
-import { CATEGORY_LABELS, MUNICIPIOS, properties, type Municipio, type PropertyCategory } from "@/data/properties";
+import { categoryLabels, municipalities, properties, type Category } from "@/data/properties";
 import { scrollTo, useFilters } from "@/lib/filters";
 
 const selectCls = "w-full bg-transparent py-1 text-sm text-foreground focus:outline-none";
 
 export function Hero() {
   const { setFilters } = useFilters();
-  const [cat, setCat] = useState<PropertyCategory | "all">("all");
-  const [mun, setMun] = useState<Municipio | "all">("all");
+  const [cat, setCat] = useState<Category | "all">("all");
+  const [mun, setMun] = useState<string>("all");
   const [area, setArea] = useState(0);
-  const municipios = new Set(properties.map((p) => p.municipio)).size + 2; // + Medellín/Carmen de V. en zona de influencia
+  const muns = municipalities();
+  const regions = new Set(properties.map((p) => p.region)).size;
 
   const stats = [
     [String(properties.length), "propiedades disponibles"],
-    [String(Math.max(municipios, 7)), "municipios en dos regiones"],
+    [String(muns.length), `municipios en ${regions} regiones`],
     ["+30 años", "de respaldo de Constructora Serving"],
     ["1 a 1", "asesoría directa con Toto"],
   ];

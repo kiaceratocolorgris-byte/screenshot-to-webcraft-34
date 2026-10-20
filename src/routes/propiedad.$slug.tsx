@@ -20,7 +20,7 @@ export const Route = createFileRoute("/propiedad/$slug")({
       image: p.cover,
       address: { "@type": "PostalAddress", addressLocality: p.municipality, streetAddress: p.location, addressCountry: "CO" },
     };
-    if (p.priceCOP) ld.offers = { "@type": "Offer", price: p.priceCOP, priceCurrency: "COP", availability: "https://schema.org/InStock" };
+    if (p.priceCOP) ld["offers"] = { "@type": "Offer", price: p.priceCOP, priceCurrency: "COP", availability: "https://schema.org/InStock" };
     return {
       meta: [
         { title },

@@ -1,7 +1,7 @@
 // Rutas centralizadas de imágenes provisionales. Cuando suba las fotos reales a
 // public/images/<slug>/, las rutas de properties.ts (cover / images) se usan automáticamente.
 import hero from "@/assets/hero.jpg";
-import toto from "@/assets/toto.jpg";
+import totoAsset from "@/assets/toto.png.asset.json";
 import lote from "@/assets/lote.jpg";
 import apto from "@/assets/apto.jpg";
 import bodega from "@/assets/bodega.jpg";
@@ -9,7 +9,7 @@ import interior from "@/assets/interior.jpg";
 import finca from "@/assets/finca.jpg";
 import type { Category, Property } from "./properties";
 
-export const images = { hero, toto, lote, apto, bodega, interior, finca };
+export const images = { hero, toto: totoAsset.url, lote, apto, bodega, interior, finca };
 
 const byCategory: Record<Category, string[]> = {
   "lotes-campestres": [lote, hero, finca],

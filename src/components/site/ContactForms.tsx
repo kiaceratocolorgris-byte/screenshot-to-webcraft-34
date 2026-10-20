@@ -4,7 +4,7 @@ import { z } from "zod";
 import { toast } from "sonner";
 import type { ReactNode } from "react";
 import { Button } from "@/components/ui/button";
-import { waLink } from "@/data/properties";
+import { whatsappLink as waLink } from "@/data/properties";
 import { Reveal } from "./Reveal";
 
 const phone = z.string().trim().regex(/^[0-9 +]{7,15}$/, "Celular inválido");

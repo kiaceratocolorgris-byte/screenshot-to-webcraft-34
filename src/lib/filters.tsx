@@ -1,9 +1,9 @@
 import { createContext, useContext, useMemo, useState, type ReactNode } from "react";
-import { properties, type Municipio, type PropertyCategory } from "@/data/properties";
+import { properties, type Category } from "@/data/properties";
 
 export interface Filters {
-  category: PropertyCategory | "all";
-  municipio: Municipio | "all";
+  category: Category | "all";
+  municipio: string | "all";
   minArea: number;
 }
 
@@ -20,8 +20,8 @@ export function FiltersProvider({ children }: { children: ReactNode }) {
       properties.filter(
         (p) =>
           (filters.category === "all" || p.category === filters.category) &&
-          (filters.municipio === "all" || p.municipio === filters.municipio) &&
-          (filters.minArea === 0 || p.minArea === null || p.minArea >= filters.minArea),
+          (filters.municipio === "all" || p.municipality === filters.municipio) &&
+          (filters.minArea === 0 || (p.areaMax ?? p.areaMin) === null || (p.areaMax ?? p.areaMin ?? 0) >= filters.minArea),
       ),
     [filters],
   );

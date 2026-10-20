@@ -1,7 +1,8 @@
 import { useState } from "react";
+import { useRouterState } from "@tanstack/react-router";
 import { Menu, X, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
-import { waLink } from "@/data/properties";
+import { whatsappLink as waLink } from "@/data/properties";
 
 const NAV = [
   ["Propiedades", "propiedades"],
@@ -15,7 +16,7 @@ export const WA_DEFAULT = "Hola Toto, vi su portafolio y quiero más informació
 
 export function Logo({ light = false }: { light?: boolean }) {
   return (
-    <a href="#top" className="flex items-center gap-3" aria-label="Toto Partner Inmobiliario, inicio">
+    <a href="/" className="flex items-center gap-3" aria-label="Toto Partner Inmobiliario, inicio">
       <span className="grid h-10 w-10 place-items-center rounded-full bg-ink">
         <svg viewBox="0 0 24 24" className="h-5 w-5 fill-ink-foreground" aria-hidden>
           <rect x="7" y="3" width="1.6" height="18" />
@@ -41,7 +42,7 @@ export function Header() {
         <Logo />
         <nav className="hidden items-center gap-7 md:flex" aria-label="Principal">
           {NAV.map(([l, id]) => (
-            <a key={id} href={`#${id}`} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
+            <a key={id} href={`/#${id}`} className="text-sm text-muted-foreground transition-colors hover:text-foreground">
               {l}
             </a>
           ))}
@@ -63,7 +64,7 @@ export function Header() {
       {open && (
         <nav className="border-t md:hidden" aria-label="Móvil">
           {NAV.map(([l, id]) => (
-            <a key={id} href={`#${id}`} onClick={() => setOpen(false)} className="container-site block border-b py-4 font-display text-lg">
+            <a key={id} href={`/#${id}`} onClick={() => setOpen(false)} className="container-site block border-b py-4 font-display text-lg">
               {l}
             </a>
           ))}
@@ -74,6 +75,8 @@ export function Header() {
 }
 
 export function WhatsAppFab() {
+  const path = useRouterState({ select: (s) => s.location.pathname });
+  if (path.startsWith("/propiedad/")) return null;
   return (
     <a
       href={waLink(WA_DEFAULT)}

@@ -1,6 +1,7 @@
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { properties } from "@/data/properties";
+import { mapPositions } from "@/data/mapPositions";
 import { Reveal, SectionHead } from "./Reveal";
 
 const TOWNS: [string, number, number][] = [
@@ -10,6 +11,7 @@ const TOWNS: [string, number, number][] = [
 
 export function MapSection() {
   const [hover, setHover] = useState<number | null>(null);
+  const onMap = properties.filter((p) => p.showOnMap && mapPositions[p.slug]);
   return (
     <section id="mapa" className="border-y bg-card py-24">
       <div className="container-site">
@@ -28,15 +30,18 @@ export function MapSection() {
               <span key={n} className="absolute -translate-x-1/2 text-[11px] uppercase tracking-[0.12em] text-muted-foreground" style={{ left: `${x}%`, top: `${y}%` }}>{n}</span>
             ))}
             <span className="absolute -translate-x-1/2 -translate-y-1/2 border border-foreground bg-card px-2 py-1 font-mono text-[10px]" style={{ left: "60%", top: "34%" }}>✈ JMC</span>
-            {properties.map((p) => (
-              <Link key={p.id} to="/propiedad/$slug" params={{ slug: p.slug }}
-                onMouseEnter={() => setHover(p.id)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(p.id)} onBlur={() => setHover(null)}
-                aria-label={`${p.id}. ${p.name}`}
-                className={`absolute grid h-7 w-7 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full font-mono text-[11px] transition-all duration-200 ${hover === p.id ? "z-10 scale-125 bg-ink text-ink-foreground" : "bg-gold text-primary-foreground"}`}
-                style={{ left: `${p.map.x}%`, top: `${p.map.y}%` }}>
-                {p.id}
-              </Link>
-            ))}
+            {onMap.map((p) => {
+              const pos = mapPositions[p.slug]!;
+              return (
+                <Link key={p.id} to="/propiedad/$slug" params={{ slug: p.slug }}
+                  onMouseEnter={() => setHover(p.id)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(p.id)} onBlur={() => setHover(null)}
+                  aria-label={`${p.id}. ${p.name}`}
+                  className={`absolute grid h-7 w-7 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full font-mono text-[11px] transition-all duration-200 ${hover === p.id ? "z-10 scale-125 bg-ink text-ink-foreground" : "bg-gold text-primary-foreground"}`}
+                  style={{ left: `${pos.x}%`, top: `${pos.y}%` }}>
+                  {p.id}
+                </Link>
+              );
+            })}
           </div>
           <ol className="max-h-[560px] overflow-auto border-t">
             {properties.map((p) => (
@@ -46,7 +51,7 @@ export function MapSection() {
                   <span className="w-6 font-mono text-xs text-gold">{String(p.id).padStart(2, "0")}</span>
                   <span className="flex-1">
                     <span className="block font-display text-lg leading-tight">{p.name}</span>
-                    <span className="text-xs text-muted-foreground">{p.municipio} · <span className="font-mono">{p.areaLabel}</span></span>
+                    <span className="text-xs text-muted-foreground">{p.municipality} · <span className="font-mono">{p.areaLabel}</span></span>
                   </span>
                   <span className="text-sm text-gold">Ver →</span>
                 </Link>

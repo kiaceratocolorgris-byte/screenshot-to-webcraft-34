@@ -8,3 +8,5 @@
 > Commits you push to the connected branch sync back to Lovable and show up in
 > the editor, so keep the branch in a working state.
 <!-- LOVABLE:END -->
+
+- src/data/properties.ts is the single source of truth for listings (owner-supplied, do not edit its text/prices); map coordinates live in src/data/mapPositions.ts and placeholder photos in src/data/images.ts so the data file stays untouched.

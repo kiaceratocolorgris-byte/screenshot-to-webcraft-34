@@ -45,14 +45,14 @@ export function Hero() {
             <span className="field-label">Tipo</span>
             <select className={selectCls} value={cat} onChange={(e) => setCat(e.target.value as never)}>
               <option value="all">Todos</option>
-              {Object.entries(CATEGORY_LABELS).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+              {Object.entries(categoryLabels).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
             </select>
           </label>
           <label className="bg-card px-4 py-3">
             <span className="field-label">Municipio</span>
-            <select className={selectCls} value={mun} onChange={(e) => setMun(e.target.value as never)}>
+            <select className={selectCls} value={mun} onChange={(e) => setMun(e.target.value)}>
               <option value="all">Todos</option>
-              {MUNICIPIOS.map((m) => <option key={m}>{m}</option>)}
+              {muns.map((m) => <option key={m}>{m}</option>)}
             </select>
           </label>
           <label className="bg-card px-4 py-3">

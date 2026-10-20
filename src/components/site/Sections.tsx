@@ -1,4 +1,5 @@
-import { properties, type Municipio } from "@/data/properties";
+import { properties } from "@/data/properties";
+type Municipio = string;
 import { images } from "@/data/images";
 import { scrollTo, useFilters } from "@/lib/filters";
 import { Reveal, SectionHead } from "./Reveal";
@@ -14,7 +15,7 @@ const ZONES: [Municipio, string][] = [
 export function ZoneGrid() {
   const { setFilters } = useFilters();
   const go = (m: Municipio | "all") => { setFilters({ municipio: m, category: "all", minArea: 0 }); scrollTo("propiedades"); };
-  const count = (m: Municipio) => properties.filter((p) => p.municipio === m).length;
+  const count = (m: Municipio) => properties.filter((p) => p.municipality === m).length;
   return (
     <section id="zonas" className="py-24">
       <div className="container-site">

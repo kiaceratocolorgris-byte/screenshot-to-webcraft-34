@@ -28,8 +28,6 @@ export const Route = createFileRoute("/propiedad/$slug")({
         { property: "og:title", content: title },
         { property: "og:description", content: p.summary },
         { property: "og:type", content: "website" },
-        { property: "og:image", content: p.cover },
-        { name: "twitter:image", content: p.cover },
       ],
       scripts: [{ type: "application/ld+json", children: JSON.stringify(ld) }],
     };

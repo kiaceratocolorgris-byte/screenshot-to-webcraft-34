@@ -25,7 +25,7 @@ const ownerSchema = z.object({
 
 const inputCls = "mt-1 w-full rounded-sm border bg-field px-3 py-2.5 text-sm focus:border-gold focus:outline-none";
 
-function Field({ label, error, children }: { label: string; error?: string; children: ReactNode }) {
+function Field({ label, error, children }: { label: string; error?: string | undefined; children: ReactNode }) {
   return (
     <label className="block">
       <span className="field-label">{label}</span>

@@ -1,24 +1,34 @@
 import { createFileRoute } from "@tanstack/react-router";
+import { FiltersProvider } from "@/lib/filters";
+import { Hero } from "@/components/site/Hero";
+import { Portfolio } from "@/components/site/Portfolio";
+import { MapSection } from "@/components/site/MapSection";
+import { ZoneGrid, BackingSection, AboutToto, ProcessSteps } from "@/components/site/Sections";
+import { ContactForms } from "@/components/site/ContactForms";
 
-// No head() here: the home route inherits title/description/og/twitter from
-// __root.tsx, and ships no og:image so serve-time hosting can inject the
-// project's social preview (explicit og:image or latest screenshot).
 export const Route = createFileRoute("/")({
+  head: () => ({
+    meta: [
+      { title: "Toto Partner Inmobiliario · Lotes y propiedades en el Oriente Antioqueño" },
+      { name: "description", content: "Portafolio inmobiliario premium en El Retiro, Rionegro, La Ceja, Envigado y Pereira, con asesoría directa de Juan Carlos “Toto” Echeverry y respaldo de Constructora Serving." },
+      { property: "og:title", content: "Toto Partner Inmobiliario" },
+      { property: "og:description", content: "Invierta en tierra con la estrategia de un golfista profesional. Lotes campestres, apartamentos y bodegas en el Oriente Antioqueño." },
+    ],
+  }),
   component: Index,
 });
 
-// IMPORTANT: Replace this placeholder. See ./README.md for routing conventions.
 function Index() {
   return (
-    <div
-      className="flex min-h-screen items-center justify-center"
-      style={{ backgroundColor: "#fcfbf8" }}
-    >
-      <img
-        data-lovable-blank-page-placeholder="REMOVE_THIS"
-        src="https://cdn.gpteng.co/blank-app-v1.svg"
-        alt="Your app will live here!"
-      />
-    </div>
+    <FiltersProvider>
+      <Hero />
+      <Portfolio />
+      <MapSection />
+      <ZoneGrid />
+      <BackingSection />
+      <AboutToto />
+      <ProcessSteps />
+      <ContactForms />
+    </FiltersProvider>
   );
 }

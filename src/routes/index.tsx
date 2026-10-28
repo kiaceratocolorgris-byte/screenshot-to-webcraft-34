@@ -13,6 +13,8 @@ export const Route = createFileRoute("/")({
       { name: "description", content: "Portafolio inmobiliario premium en El Retiro, Rionegro, La Ceja, Envigado y Pereira, con asesoría directa de Juan Carlos “Toto” Echeverry y respaldo de Constructora Serving." },
       { property: "og:title", content: "Toto Partner Inmobiliario" },
       { property: "og:description", content: "Invierta en tierra con la estrategia de un golfista profesional. Lotes campestres, apartamentos y bodegas en el Oriente Antioqueño." },
+      { property: "og:type", content: "website" },
+      { name: "twitter:card", content: "summary_large_image" },
     ],
   }),
   component: Index,

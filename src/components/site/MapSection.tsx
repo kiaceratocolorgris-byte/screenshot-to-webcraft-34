@@ -1,3 +1,4 @@
+import { useLanguage } from "@/lib/language";
 import { useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { properties } from "@/data/properties";
@@ -10,13 +11,14 @@ const TOWNS: [string, number, number][] = [
 ];
 
 export function MapSection() {
+  const { t, language } = useLanguage();
   const [hover, setHover] = useState<number | null>(null);
   const onMap = properties.filter((p) => p.showOnMap && mapPositions[p.slug]);
   return (
     <section id="mapa" className="border-y bg-card py-24">
       <div className="container-site">
         <Reveal>
-          <SectionHead eyebrow="Ubicación" title="El Oriente, lote por lote" aside="Toque un número para ver la propiedad. El aeropuerto José María Córdova queda en el centro de casi todo el portafolio." />
+          <SectionHead eyebrow={t("Ubicación")} title={t("El Oriente, lote por lote")} aside={t("Toque un número para ver la propiedad. El aeropuerto José María Córdova queda en el centro de casi todo el portafolio.")} />
         </Reveal>
         <div className="grid gap-10 lg:grid-cols-[1.4fr_1fr]">
           <div className="relative aspect-square border bg-background sm:aspect-[4/3]">
@@ -27,7 +29,7 @@ export function MapSection() {
               <path d="M12 28 L14 58" fill="none" strokeWidth="0.6" strokeDasharray="1.5 1" />
             </svg>
             {TOWNS.map(([n, x, y]) => (
-              <span key={n} className="absolute -translate-x-1/2 text-[11px] uppercase tracking-[0.12em] text-muted-foreground" style={{ left: `${x}%`, top: `${y}%` }}>{n}</span>
+              <span key={t(n)} className="absolute -translate-x-1/2 text-[11px] uppercase tracking-[0.12em] text-muted-foreground" style={{ left: `${t(x)}%`, top: `${y}%` }}>{t(n)}</span>
             ))}
             <span className="absolute -translate-x-1/2 -translate-y-1/2 border border-foreground bg-card px-2 py-1 font-mono text-[10px]" style={{ left: "60%", top: "34%" }}>✈ JMC</span>
             {onMap.map((p) => {
@@ -35,7 +37,7 @@ export function MapSection() {
               return (
                 <Link key={p.id} to="/propiedad/$slug" params={{ slug: p.slug }}
                   onMouseEnter={() => setHover(p.id)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(p.id)} onBlur={() => setHover(null)}
-                  aria-label={`${p.id}. ${p.name}`}
+                  aria-label={`${p.id}. ${t(p.name)}`}
                   className={`absolute grid h-7 w-7 -translate-x-1/2 -translate-y-1/2 place-items-center rounded-full font-mono text-[11px] transition-all duration-200 ${hover === p.id ? "z-10 scale-125 bg-ink text-ink-foreground" : "bg-gold text-primary-foreground"}`}
                   style={{ left: `${pos.x}%`, top: `${pos.y}%` }}>
                   {p.id}
@@ -50,10 +52,10 @@ export function MapSection() {
                   className={`flex items-center gap-4 border-b px-2 py-3 transition-colors duration-200 ${hover === p.id ? "bg-background" : ""}`}>
                   <span className="w-6 font-mono text-xs text-gold">{String(p.id).padStart(2, "0")}</span>
                   <span className="flex-1">
-                    <span className="block font-display text-lg leading-tight">{p.name}</span>
-                    <span className="text-xs text-muted-foreground">{p.municipality} · <span className="font-mono">{p.areaLabel}</span></span>
+                    <span className="block font-display text-lg leading-tight">{t(p.name)}</span>
+                    <span className="text-xs text-muted-foreground">{p.municipality} · <span className="font-mono">{t(p.areaLabel)}</span></span>
                   </span>
-                  <span className="text-sm text-gold">Ver →</span>
+                  <span className="text-sm text-gold">{t("Ver →")}</span>
                 </Link>
               </li>
             ))}

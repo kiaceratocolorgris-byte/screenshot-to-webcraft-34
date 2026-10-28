@@ -1,5 +1,9 @@
 // English presentation layer; owner-supplied Spanish listings remain unchanged.
 export const english: Record<string, string> = {
+  "Mensaje enviado": "Message sent",
+  "Enviando…": "Sending…",
+  "No se pudo enviar el mensaje. Intente de nuevo.": "The message could not be sent. Please try again.",
+  "Asesoría personal para encontrar la propiedad indicada.": "Personal guidance to find the right property.",
   "Idioma": "Language",
   "Vía La Acuarela, Envigado": "La Acuarela road, Envigado",
   "Km 2 vía Belén – Rionegro": "Km 2, Belén–Rionegro road",

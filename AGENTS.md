@@ -12,3 +12,4 @@
 - src/data/properties.ts is the single source of truth for listings (owner-supplied, do not edit its text/prices); map coordinates live in src/data/mapPositions.ts and placeholder photos in src/data/images.ts so the data file stays untouched.
 - Use the shared Header Logo component for site branding and derive the favicon from the same artwork so both stay consistent.
 - Keep localization in the shared language provider and English presentation dictionary; translate displayed listing text without mutating owner-supplied property data or filter values.
+- Route contact form delivery through the shared browser-safe contact delivery module; require provider acceptance before resetting fields or displaying success so failed leads can be retried.

@@ -3,7 +3,7 @@ import { useRouterState } from "@tanstack/react-router";
 import { Menu, X, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { whatsappLink as waLink } from "@/data/properties";
-import totoLogo from "@/assets/toto-logo-header.jpg";
+import totoLogo from "@/assets/toto-logo-original.png.asset.json";
 
 const NAV = [
   ["Propiedades", "propiedades"],
@@ -18,7 +18,7 @@ export const WA_DEFAULT = "Hola Toto, vi su portafolio y quiero más informació
 export function Logo() {
   return (
     <a href="/" className="flex items-center gap-3" aria-label="Toto Partner Inmobiliario, inicio">
-      <img src={totoLogo} alt="Totogolf · Partner inmobiliario" width={950} height={341} className="h-auto w-[154px] shrink-0 sm:w-[174px]" />
+      <img src={totoLogo.url} alt="Totogolf · Partner inmobiliario" width={475} height={475} className="h-16 w-16 shrink-0 object-contain" />
     </a>
   );
 }

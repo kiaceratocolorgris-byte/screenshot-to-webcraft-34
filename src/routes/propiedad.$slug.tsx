@@ -2,6 +2,7 @@ import { createFileRoute, Link, notFound, type ErrorComponentProps } from "@tans
 import { Button } from "@/components/ui/button";
 import { properties } from "@/data/properties";
 import { PropertyDetail } from "@/components/site/PropertyDetail";
+import { useLanguage } from "@/lib/language";
 
 export const Route = createFileRoute("/propiedad/$slug")({
   loader: ({ params }) => {
@@ -44,21 +45,23 @@ function PropertyPage() {
 }
 
 function NotFoundProperty() {
+  const { t } = useLanguage();
   return (
     <section className="container-site flex min-h-[60vh] flex-col items-center justify-center py-24 text-center">
-      <p className="eyebrow">Propiedad no encontrada</p>
-      <h1 className="mt-4 text-5xl md:text-6xl">Este lote ya no está en el portafolio</h1>
-      <p className="mt-4 max-w-md text-muted-foreground">Puede que se haya vendido o que el enlace haya cambiado. Vea las propiedades disponibles.</p>
-      <Button asChild className="mt-8"><Link to="/" hash="propiedades">Ver el portafolio</Link></Button>
+      <p className="eyebrow">{t("Propiedad no encontrada")}</p>
+      <h1 className="mt-4 text-5xl md:text-6xl">{t("Este lote ya no está en el portafolio")}</h1>
+      <p className="mt-4 max-w-md text-muted-foreground">{t("Puede que se haya vendido o que el enlace haya cambiado. Vea las propiedades disponibles.")}</p>
+      <Button asChild className="mt-8"><Link to="/" hash="propiedades">{t("Ver el portafolio")}</Link></Button>
     </section>
   );
 }
 
 function ErrorProperty({ reset }: ErrorComponentProps) {
+  const { t } = useLanguage();
   return (
     <section className="container-site py-24 text-center">
-      <h1 className="text-4xl">No pudimos cargar esta propiedad</h1>
-      <Button className="mt-6" onClick={reset}>Intentar de nuevo</Button>
+      <h1 className="text-4xl">{t("No pudimos cargar esta propiedad")}</h1>
+      <Button className="mt-6" onClick={reset}>{t("Intentar de nuevo")}</Button>
     </section>
   );
 }

@@ -3,6 +3,7 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
+import { CircleCheck } from "lucide-react";
 import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
 import { submitContactLead } from "@/lib/contact-delivery";
@@ -37,36 +38,64 @@ function Field({ label, error, children }: { label: string; error?: string | und
   );
 }
 
+type Status = "idle" | "success" | "error";
+
 function useLeadSubmission(category: "Compradores" | "Propietarios") {
   const { t } = useLanguage();
-  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const [status, setStatus] = useState<Status>("idle");
   const submit = async (fields: Record<string, string | undefined>, reset: () => void) => {
     setStatus("idle");
     try {
       await submitContactLead(category, fields);
       reset();
       setStatus("success");
-      toast.success(t("Mensaje enviado"));
     } catch {
       setStatus("error");
       toast.error(t("No se pudo enviar el mensaje. Intente de nuevo."));
     }
   };
-  return { submit, status };
+  const dismiss = () => setStatus("idle");
+  return { submit, status, dismiss };
 }
 
-function SubmissionStatus({ status }: { status: "idle" | "success" | "error" }) {
+function SubmissionError({ status }: { status: Status }) {
   const { t } = useLanguage();
-  if (status === "idle") return null;
-  return <p role={status === "error" ? "alert" : "status"} className={`text-sm ${status === "error" ? "text-destructive" : "text-foreground"}`}>{t(status === "success" ? "Mensaje enviado" : "No se pudo enviar el mensaje. Intente de nuevo.")}</p>;
+  if (status !== "error") return null;
+  return (
+    <p role="alert" className="text-base font-semibold text-destructive">
+      {t("No se pudo enviar el mensaje. Intente de nuevo.")}
+    </p>
+  );
+}
+
+function SubmissionSuccess({ status, onDismiss }: { status: Status; onDismiss: () => void }) {
+  const { t } = useLanguage();
+  if (status !== "success") return null;
+  return (
+    <div
+      role="status"
+      className="absolute inset-0 z-10 flex flex-col items-center justify-center gap-5 bg-card px-6 text-center"
+    >
+      <span className="flex h-16 w-16 items-center justify-center rounded-full bg-gold/15 text-gold">
+        <CircleCheck className="h-10 w-10" aria-hidden="true" />
+      </span>
+      <p className="text-4xl font-semibold leading-tight md:text-5xl">{t("Mensaje enviado")}</p>
+      <p className="max-w-sm text-lg text-muted-foreground">
+        {t("Gracias por escribir. Le responderemos muy pronto.")}
+      </p>
+      <Button type="button" variant="outline" onClick={onDismiss}>
+        {t("Enviar otro mensaje")}
+      </Button>
+    </div>
+  );
 }
 
 function BuyerForm() {
   const { t } = useLanguage();
-  const { submit, status } = useLeadSubmission("Compradores");
+  const { submit, status, dismiss } = useLeadSubmission("Compradores");
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<z.infer<typeof buyerSchema>>({ resolver: zodResolver(buyerSchema), defaultValues: { objetivo: "Vivir", presupuesto: "" } });
   return (
-    <form className="flex flex-1 flex-col gap-4" aria-busy={isSubmitting} onSubmit={handleSubmit((d) => submit(d, reset))}>
+    <form className="relative flex flex-1 flex-col gap-4" aria-busy={isSubmitting} onSubmit={handleSubmit((d) => submit(d, reset))}>
       <Field label={t("Nombre")} error={errors.nombre?.message ? t(errors.nombre.message) : undefined}><input className={inputCls} {...register("nombre")} /></Field>
       <Field label={t("Celular")} error={errors.celular?.message ? t(errors.celular.message) : undefined}><input className={inputCls} inputMode="tel" {...register("celular")} /></Field>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -80,17 +109,21 @@ function BuyerForm() {
         </Field>
       </div>
       <Field label={t("Mensaje")}><textarea rows={3} className={inputCls} {...register("mensaje")} /></Field>
-      <div className="mt-auto space-y-3"><SubmissionStatus status={status} /><Button type="submit" disabled={isSubmitting} className="w-full">{t(isSubmitting ? "Enviando…" : "Enviar a Toto")}</Button></div>
+      <div className="mt-auto space-y-3">
+        <SubmissionError status={status} />
+        <Button type="submit" disabled={isSubmitting} className="w-full">{t(isSubmitting ? "Enviando…" : "Enviar a Toto")}</Button>
+      </div>
+      <SubmissionSuccess status={status} onDismiss={dismiss} />
     </form>
   );
 }
 
 function OwnerForm() {
   const { t } = useLanguage();
-  const { submit, status } = useLeadSubmission("Propietarios");
+  const { submit, status, dismiss } = useLeadSubmission("Propietarios");
   const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<z.infer<typeof ownerSchema>>({ resolver: zodResolver(ownerSchema), defaultValues: { tipo: "Lote" } });
   return (
-    <form className="flex flex-1 flex-col gap-4" aria-busy={isSubmitting} onSubmit={handleSubmit((d) => submit(d, reset))}>
+    <form className="relative flex flex-1 flex-col gap-4" aria-busy={isSubmitting} onSubmit={handleSubmit((d) => submit(d, reset))}>
       <Field label={t("Nombre")} error={errors.nombre?.message ? t(errors.nombre.message) : undefined}><input className={inputCls} {...register("nombre")} /></Field>
       <Field label={t("Celular")} error={errors.celular?.message ? t(errors.celular.message) : undefined}><input className={inputCls} inputMode="tel" {...register("celular")} /></Field>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -98,7 +131,11 @@ function OwnerForm() {
         <Field label={t("Municipio")} error={errors.municipio?.message ? t(errors.municipio.message) : undefined}><input className={inputCls} {...register("municipio")} /></Field>
       </div>
       <Field label={t("Área aproximada")}><input className={inputCls} placeholder={t("Ej. 3.000 m²")} {...register("area")} /></Field>
-      <div className="mt-auto space-y-3"><SubmissionStatus status={status} /><Button type="submit" variant="outline" disabled={isSubmitting} className="w-full">{t(isSubmitting ? "Enviando…" : "Solicitar avalúo")}</Button></div>
+      <div className="mt-auto space-y-3">
+        <SubmissionError status={status} />
+        <Button type="submit" variant="outline" disabled={isSubmitting} className="w-full">{t(isSubmitting ? "Enviando…" : "Solicitar avalúo")}</Button>
+      </div>
+      <SubmissionSuccess status={status} onDismiss={dismiss} />
     </form>
   );
 }

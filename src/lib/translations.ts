@@ -1,6 +1,8 @@
 // English presentation layer; owner-supplied Spanish listings remain unchanged.
 export const english: Record<string, string> = {
   "Mensaje enviado": "Message sent",
+  "Gracias por escribir. Le responderemos muy pronto.": "Thank you for writing. We'll get back to you very soon.",
+  "Enviar otro mensaje": "Send another message",
   "Enviando…": "Sending…",
   "No se pudo enviar el mensaje. Intente de nuevo.": "The message could not be sent. Please try again.",
   "Asesoría personal para encontrar la propiedad indicada.": "Personal guidance to find the right property.",

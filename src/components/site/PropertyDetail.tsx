@@ -22,6 +22,7 @@ function Gallery({ p }: { p: Property }) {
   const [active, setActive] = useState(0);
   const [open, setOpen] = useState<number | null>(null);
   const n = imgs.length;
+  const openImage = open === null ? undefined : imgs[open];
   const move = useCallback((d: number) => setOpen((o) => (o === null ? o : (o + d + n) % n)), [n]);
 
   useEffect(() => {
@@ -37,20 +38,24 @@ function Gallery({ p }: { p: Property }) {
   }, [open, move]);
 
   const order = [active, ...imgs.map((_, i) => i).filter((i) => i !== active)];
-  const tile = (i: number, cls: string, eager = false) => (
-    <button key={i} onClick={() => setOpen(i)} className={`group overflow-hidden ${cls}`} aria-label={`Ampliar foto ${i + 1} de ${t(p.name)}`}>
-      <SmartImage src={imgs[i]!.src} fallback={imgs[i]!.fallback} alt={`${t(p.name)}, foto ${i + 1}`} loading={eager ? "eager" : "lazy"} width={1024} height={768}
+  const tile = (i: number | undefined, cls: string, eager = false) => {
+    const image = i === undefined ? undefined : imgs[i];
+    if (i === undefined || !image) return null;
+    return (
+    <button key={i} onClick={() => setOpen(i)} className={`group overflow-hidden ${cls}`} aria-label={`${t("Ampliar foto")} ${i + 1} ${t("de")} ${t(p.name)}`}>
+      <SmartImage src={image.src} fallback={image.fallback} alt={`${t(p.name)}, ${t("foto")} ${i + 1}`} loading={eager ? "eager" : "lazy"} width={1024} height={768}
         wrapperClassName="h-full w-full" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" />
     </button>
   );
+  };
 
   return (
     <div>
       {n >= 3 ? (
         <div className="grid aspect-[16/10] grid-cols-3 grid-rows-2 gap-2">
-          {tile(order[0]!, "col-span-2 row-span-2", true)}
-          {tile(order[1]!, "")}
-          {tile(order[2]!, "")}
+          {tile(order[0], "col-span-2 row-span-2", true)}
+          {tile(order[1], "")}
+          {tile(order[2], "")}
         </div>
       ) : (
         <div className={`grid aspect-[16/10] gap-2 ${n === 2 ? "grid-cols-2" : ""}`}>{order.map((i, k) => tile(i, "", k === 0))}</div>
@@ -58,22 +63,22 @@ function Gallery({ p }: { p: Property }) {
       {n > 1 && (
         <div className="mt-2 flex gap-2 overflow-x-auto">
           {imgs.map((im, i) => (
-            <button key={i} onClick={() => setActive(i)} aria-label={`Ver foto ${i + 1}`} aria-pressed={active === i}
+            <button key={i} onClick={() => setActive(i)} aria-label={`${t("Ver foto")} ${i + 1}`} aria-pressed={active === i}
               className={`h-16 w-24 shrink-0 overflow-hidden border-2 ${active === i ? "border-gold" : "border-transparent opacity-70 hover:opacity-100"}`}>
               <SmartImage src={im.src} fallback={im.fallback} alt="" width={96} height={64} wrapperClassName="h-full w-full" className="h-full w-full object-cover" />
             </button>
           ))}
         </div>
       )}
-      {open !== null && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/95" role="dialog" aria-modal="true" aria-label={`Galería de ${t(p.name)}`} onClick={() => setOpen(null)}>
-          <img src={imgs[open]!.src} onError={(e) => { e.currentTarget.src = imgs[open]!.fallback; }} alt={`${t(p.name)}, foto ${open + 1}`} className="max-h-[88vh] max-w-[92vw] object-contain" onClick={(e) => e.stopPropagation()} />
+      {open !== null && openImage && (
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/95" role="dialog" aria-modal="true" aria-label={`${t("Galería de")} ${t(p.name)}`} onClick={() => setOpen(null)}>
+          <img src={openImage.src} onError={(e) => { e.currentTarget.src = openImage.fallback; }} alt={`${t(p.name)}, ${t("foto")} ${open + 1}`} className="max-h-[88vh] max-w-[92vw] object-contain" onClick={(e) => e.stopPropagation()} />
           <button autoFocus onClick={() => setOpen(null)} aria-label={t("Cerrar")} className="absolute right-4 top-4 p-2 text-ink-foreground"><X className="h-7 w-7" /></button>
           {n > 1 && <>
             <button onClick={(e) => { e.stopPropagation(); move(-1); }} aria-label={t("Foto anterior")} className="absolute left-3 p-3 text-ink-foreground"><ChevronLeft className="h-8 w-8" /></button>
             <button onClick={(e) => { e.stopPropagation(); move(1); }} aria-label={t("Foto siguiente")} className="absolute right-3 p-3 text-ink-foreground"><ChevronRight className="h-8 w-8" /></button>
           </>}
-          <span className="absolute bottom-5 font-mono text-sm text-ink-foreground/80">{open + 1} / {t(n)}</span>
+          <span className="absolute bottom-5 font-mono text-sm text-ink-foreground/80">{open + 1} / {n}</span>
         </div>
       )}
     </div>
@@ -108,10 +113,10 @@ function VisitDialog({ p, open, onOpenChange }: { p: Property; open: boolean; on
           toast.success(t("Abrimos WhatsApp con su solicitud de visita."));
           onOpenChange(false);
         }}>
-          {([["nombre", "Nombre", "text"], ["celular", "Celular", "tel"], ["fecha", "Fecha y hora preferida", "datetime-local"]] as const).map(([k, l, t]) => (
+          {([["nombre", "Nombre", "text"], ["celular", "Celular", "tel"], ["fecha", "Fecha y hora preferida", "datetime-local"]] as const).map(([k, l, inputType]) => (
             <label key={k} className="block">
               <span className="field-label">{t(l)}</span>
-              <input name={k} type={t(title)} className={inputCls} />
+              <input name={k} type={inputType} className={inputCls} />
               {errors[k] && <span className="mt-1 block text-xs text-destructive">{t(errors[k])}</span>}
             </label>
           ))}
@@ -130,7 +135,7 @@ function PdfCard({ p }: { p: Property }) {
     <form className="border bg-card p-6" onSubmit={(e) => {
       e.preventDefault();
       const r = coPhone.safeParse(String(new FormData(e.currentTarget).get("wa") ?? ""));
-      if (!r.success) { setErr(r.error.issues[0]!.message); return; }
+      if (!r.success) { setErr(r.error.issues[0]?.message ?? "Ingrese un celular colombiano de 10 dígitos"); return; }
       setErr("");
       if (p.pdfUrl) {
         const a = document.createElement("a"); a.href = p.pdfUrl; a.download = ""; a.target = "_blank"; a.click();
@@ -190,7 +195,7 @@ export function PropertyDetail({ p }: { p: Property }) {
     <div className="pb-24 lg:pb-0">
       <div className="container-site py-8">
         <nav aria-label={t("Ruta")} className="mb-6 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-          <Link to="/" hash={t("propiedades")} className="text-gold hover:underline">{t("← Todas las propiedades")}</Link>
+          <Link to="/" hash="propiedades" className="text-gold hover:underline">{t("← Todas las propiedades")}</Link>
           <span>/</span><span>{p.municipality}</span><span>/</span><span className="text-foreground">{t(p.name)}</span>
         </nav>
 
@@ -198,7 +203,7 @@ export function PropertyDetail({ p }: { p: Property }) {
           <div className="min-w-0">
             <Gallery p={p} />
 
-            <p className="eyebrow mt-10">{p.tag.toUpperCase()} · {p.municipality}</p>
+            <p className="eyebrow mt-10">{t(p.tag).toUpperCase()} · {p.municipality}</p>
             <h1 className="mt-3 text-5xl leading-tight md:text-6xl">{t(p.name)}</h1>
             <p className="mt-3 text-lg text-muted-foreground">{t(p.location)}</p>
 
@@ -267,7 +272,7 @@ export function PropertyDetail({ p }: { p: Property }) {
 
         {related.length > 0 && (
           <section className="mt-20 border-t pt-14">
-            <h2 className="mb-8 text-3xl md:text-4xl">{t("Otras propiedades en")} {same.length ? p.municipality : "la misma categoría"}</h2>
+            <h2 className="mb-8 text-3xl md:text-4xl">{t("Otras propiedades en")} {t(same.length ? p.municipality : "la misma categoría")}</h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{related.map((r) => <PropertyCard key={r.id} p={r} />)}</div>
           </section>
         )}

@@ -1,8 +1,6 @@
-import { useLanguage } from "@/lib/language";
 import { useEffect, useRef, type ReactNode } from "react";
 
 export function Reveal({ children, className = "" }: { children: ReactNode; className?: string }) {
-  const { t, language } = useLanguage();
   const ref = useRef<HTMLDivElement>(null);
   useEffect(() => {
     const el = ref.current;
@@ -27,7 +25,6 @@ export function Reveal({ children, className = "" }: { children: ReactNode; clas
 }
 
 export function SectionHead({ eyebrow, title, aside }: { eyebrow: string; title: string; aside?: string }) {
-  const { t, language } = useLanguage();
   return (
     <div className="mb-10 grid gap-6 md:grid-cols-[1.3fr_1fr] md:items-end">
       <div>

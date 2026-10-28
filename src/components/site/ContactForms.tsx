@@ -38,10 +38,9 @@ function Field({ label, error, children }: { label: string; error?: string | und
 }
 
 // Hoy se envía por WhatsApp; para migrar a Lovable Cloud reemplace esta función.
-function submitLead(msg: string) {
-  const { t, language } = useLanguage();
+function submitLead(msg: string, success: string) {
   window.open(waLink(msg), "_blank", "noopener");
-  toast.success(t("¡Listo! Abrimos WhatsApp con su mensaje para Toto."));
+  toast.success(success);
 }
 
 function BuyerForm() {
@@ -49,7 +48,7 @@ function BuyerForm() {
   const { register, handleSubmit, formState: { errors }, reset } = useForm<z.infer<typeof buyerSchema>>({ resolver: zodResolver(buyerSchema), defaultValues: { objetivo: "Vivir", presupuesto: "" } });
   return (
     <form className="flex flex-1 flex-col gap-4" onSubmit={handleSubmit((d) => {
-      submitLead(`Hola Toto, soy ${d.nombre} (${d.celular}). Objetivo: ${d.objetivo}. Presupuesto: ${d.presupuesto}.${d.mensaje ? ` ${d.mensaje}` : ""}`);
+      submitLead(`Hola Toto, soy ${d.nombre} (${d.celular}). Objetivo: ${d.objetivo}. Presupuesto: ${d.presupuesto}.${d.mensaje ? ` ${d.mensaje}` : ""}`, t("¡Listo! Abrimos WhatsApp con su mensaje para Toto."));
       reset();
     })}>
       <Field label={t("Nombre")} error={errors.nombre?.message ? t(errors.nombre.message) : undefined}><input className={inputCls} {...register("nombre")} /></Field>
@@ -75,7 +74,7 @@ function OwnerForm() {
   const { register, handleSubmit, formState: { errors }, reset } = useForm<z.infer<typeof ownerSchema>>({ resolver: zodResolver(ownerSchema), defaultValues: { tipo: "Lote" } });
   return (
     <form className="flex flex-1 flex-col gap-4" onSubmit={handleSubmit((d) => {
-      submitLead(`Hola Toto, soy ${d.nombre} (${d.celular}). Quiero vender: ${d.tipo} en ${d.municipio}${d.area ? `, área aprox. ${d.area}` : ""}. Solicito avalúo.`);
+      submitLead(`Hola Toto, soy ${d.nombre} (${d.celular}). Quiero vender: ${d.tipo} en ${d.municipio}${d.area ? `, área aprox. ${d.area}` : ""}. Solicito avalúo.`, t("¡Listo! Abrimos WhatsApp con su mensaje para Toto."));
       reset();
     })}>
       <Field label={t("Nombre")} error={errors.nombre?.message ? t(errors.nombre.message) : undefined}><input className={inputCls} {...register("nombre")} /></Field>

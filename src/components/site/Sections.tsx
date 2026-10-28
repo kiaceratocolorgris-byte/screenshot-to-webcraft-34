@@ -25,7 +25,7 @@ export function ZoneGrid() {
         <div className="grid gap-px border bg-border sm:grid-cols-2 lg:grid-cols-3">
           {ZONES.map(([m, d]) => (
             <button key={m} onClick={() => go(m)} className="group bg-card p-8 text-left transition-colors duration-200 hover:bg-background">
-              <span className="font-mono text-xs text-gold">{count(m)} {count(m) === 1 ? "propiedad" : "propiedades"}</span>
+              <span className="font-mono text-xs text-gold">{count(m)} {t(count(m) === 1 ? "propiedad" : "propiedades")}</span>
               <h3 className="mt-3 text-3xl">{m}</h3>
               <p className="mt-3 text-sm text-muted-foreground">{t(d)}</p>
               <span className="mt-6 inline-block text-sm text-gold transition-transform duration-200 group-hover:translate-x-1">{t("Ver propiedades →")}</span>
@@ -45,7 +45,7 @@ export function ZoneGrid() {
 
 export function BackingSection() {
   const { t, language } = useLanguage();
-  const stats = [["1993", "fundada en Rionegro"], ["+30", "años de trayectoria"], ["600", "empleos directos"], ["900", "empleos indirectos"]];
+  const stats: [string, string][] = [["1993", "fundada en Rionegro"], ["+30", "años de trayectoria"], ["600", "empleos directos"], ["900", "empleos indirectos"]];
   return (
     <section className="bg-primary py-24 text-primary-foreground">
       <div className="container-site grid gap-12 lg:grid-cols-2 lg:items-center">
@@ -69,7 +69,7 @@ export function BackingSection() {
 
 export function AboutToto() {
   const { t, language } = useLanguage();
-  const pillars = [
+  const pillars: [string, string][] = [
     ["Leer el green", "Estudio la zona, las vías y la valorización antes de recomendar."],
     ["Elegir el palo", "Le muestro la propiedad que encaja con su objetivo, no la que más comisión deja."],
     ["Jugar limpio", "Información completa y transparente en cada paso de la compra."],
@@ -106,7 +106,7 @@ export function AboutToto() {
 
 export function ProcessSteps() {
   const { t, language } = useLanguage();
-  const steps = [
+  const steps: [string, string][] = [
     ["Asesoría", "Definimos objetivo, presupuesto y zona: vivir, invertir o desarrollar."],
     ["Visita", "Recorremos los lotes que encajan, con planos y topografía en mano."],
     ["Estudio de títulos", "Revisamos el certificado de libertad, el uso del suelo y la normativa del municipio."],
@@ -118,7 +118,7 @@ export function ProcessSteps() {
       <div className="container-site">
         <Reveal><SectionHead eyebrow={t("Cómo compramos juntos")} title={t("Su compra, paso a paso")} /></Reveal>
         <ol className="grid gap-8 md:grid-cols-5">
-          {steps.map(([t, d], i) => (
+          {steps.map(([title, d], i) => (
             <li key={t(title)} className="border-t border-foreground pt-4">
               <span className="font-mono text-sm text-gold">0{i + 1}</span>
               <h3 className="mt-2 text-xl">{t(title)}</h3>

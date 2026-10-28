@@ -16,9 +16,9 @@ export function Hero() {
   const muns = municipalities();
   const regions = new Set(properties.map((p) => p.region)).size;
 
-  const stats = [
+  const stats: [string, string][] = [
     [String(properties.length), "propiedades disponibles"],
-    [String(muns.length), `municipios en ${regions} regiones`],
+    [String(muns.length), `${t("municipios en")} ${regions} ${t("regiones")}`],
     ["+30 años", "de respaldo de Constructora Serving"],
     ["1 a 1", "asesoría directa con Toto"],
   ];
@@ -47,14 +47,14 @@ export function Hero() {
             <span className="field-label">{t("Tipo")}</span>
             <select className={selectCls} value={cat} onChange={(e) => setCat(e.target.value as never)}>
               <option value="all">{t("Todos")}</option>
-              {Object.entries(categoryLabels).map(([k, v]) => <option key={k} value={k}>{v}</option>)}
+              {Object.entries(categoryLabels).map(([k, v]) => <option key={k} value={k}>{t(v)}</option>)}
             </select>
           </label>
           <label className="bg-card px-4 py-3">
             <span className="field-label">{t("Municipio")}</span>
             <select className={selectCls} value={mun} onChange={(e) => setMun(e.target.value)}>
               <option value="all">{t("Todos")}</option>
-              {muns.map((m) => <option key={m}>{m}</option>)}
+              {muns.map((m) => <option key={m} value={m}>{t(m)}</option>)}
             </select>
           </label>
           <label className="bg-card px-4 py-3">

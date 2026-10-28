@@ -14,7 +14,7 @@ const ZONES: [Municipio, string][] = [
 ];
 
 export function ZoneGrid() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const { setFilters } = useFilters();
   const go = (m: Municipio | "all") => { setFilters({ municipio: m, category: "all", minArea: 0 }); scrollTo("propiedades"); };
   const count = (m: Municipio) => properties.filter((p) => p.municipality === m).length;
@@ -44,7 +44,7 @@ export function ZoneGrid() {
 }
 
 export function BackingSection() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const stats: [string, string][] = [["1993", "fundada en Rionegro"], ["+30", "años de trayectoria"], ["600", "empleos directos"], ["900", "empleos indirectos"]];
   return (
     <section className="bg-primary py-24 text-primary-foreground">
@@ -68,7 +68,7 @@ export function BackingSection() {
 }
 
 export function AboutToto() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const pillars: [string, string][] = [
     ["Leer el green", "Estudio la zona, las vías y la valorización antes de recomendar."],
     ["Elegir el palo", "Le muestro la propiedad que encaja con su objetivo, no la que más comisión deja."],
@@ -105,7 +105,7 @@ export function AboutToto() {
 }
 
 export function ProcessSteps() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const steps: [string, string][] = [
     ["Asesoría", "Definimos objetivo, presupuesto y zona: vivir, invertir o desarrollar."],
     ["Visita", "Recorremos los lotes que encajan, con planos y topografía en mano."],
@@ -132,7 +132,7 @@ export function ProcessSteps() {
 }
 
 export function Footer() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   return (
     <footer className="bg-ink py-16 text-ink-foreground">
       <div className="container-site grid gap-10 md:grid-cols-3">

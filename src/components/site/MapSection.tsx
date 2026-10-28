@@ -11,7 +11,7 @@ const TOWNS: [string, number, number][] = [
 ];
 
 export function MapSection() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const [hover, setHover] = useState<number | null>(null);
   const onMap = properties.filter((p) => p.showOnMap && mapPositions[p.slug]);
   return (

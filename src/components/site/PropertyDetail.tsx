@@ -1,3 +1,4 @@
+import { useLanguage } from "@/lib/language";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
 import { CalendarDays, ChevronLeft, ChevronRight, MessageCircle, X } from "lucide-react";
@@ -16,6 +17,7 @@ export const coPhone = z.string().transform((s) => s.replace(/\D/g, "").replace(
 
 /* ---------- Galería + lightbox ---------- */
 function Gallery({ p }: { p: Property }) {
+  const { t, language } = useLanguage();
   const imgs = galleryFor(p);
   const [active, setActive] = useState(0);
   const [open, setOpen] = useState<number | null>(null);
@@ -36,8 +38,8 @@ function Gallery({ p }: { p: Property }) {
 
   const order = [active, ...imgs.map((_, i) => i).filter((i) => i !== active)];
   const tile = (i: number, cls: string, eager = false) => (
-    <button key={i} onClick={() => setOpen(i)} className={`group overflow-hidden ${cls}`} aria-label={`Ampliar foto ${i + 1} de ${p.name}`}>
-      <SmartImage src={imgs[i]!.src} fallback={imgs[i]!.fallback} alt={`${p.name}, foto ${i + 1}`} loading={eager ? "eager" : "lazy"} width={1024} height={768}
+    <button key={i} onClick={() => setOpen(i)} className={`group overflow-hidden ${cls}`} aria-label={`Ampliar foto ${i + 1} de ${t(p.name)}`}>
+      <SmartImage src={imgs[i]!.src} fallback={imgs[i]!.fallback} alt={`${t(p.name)}, foto ${i + 1}`} loading={eager ? "eager" : "lazy"} width={1024} height={768}
         wrapperClassName="h-full w-full" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" />
     </button>
   );
@@ -64,14 +66,14 @@ function Gallery({ p }: { p: Property }) {
         </div>
       )}
       {open !== null && (
-        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/95" role="dialog" aria-modal="true" aria-label={`Galería de ${p.name}`} onClick={() => setOpen(null)}>
-          <img src={imgs[open]!.src} onError={(e) => { e.currentTarget.src = imgs[open]!.fallback; }} alt={`${p.name}, foto ${open + 1}`} className="max-h-[88vh] max-w-[92vw] object-contain" onClick={(e) => e.stopPropagation()} />
-          <button autoFocus onClick={() => setOpen(null)} aria-label="Cerrar" className="absolute right-4 top-4 p-2 text-ink-foreground"><X className="h-7 w-7" /></button>
+        <div className="fixed inset-0 z-[60] flex items-center justify-center bg-ink/95" role="dialog" aria-modal="true" aria-label={`Galería de ${t(p.name)}`} onClick={() => setOpen(null)}>
+          <img src={imgs[open]!.src} onError={(e) => { e.currentTarget.src = imgs[open]!.fallback; }} alt={`${t(p.name)}, foto ${open + 1}`} className="max-h-[88vh] max-w-[92vw] object-contain" onClick={(e) => e.stopPropagation()} />
+          <button autoFocus onClick={() => setOpen(null)} aria-label={t("Cerrar")} className="absolute right-4 top-4 p-2 text-ink-foreground"><X className="h-7 w-7" /></button>
           {n > 1 && <>
-            <button onClick={(e) => { e.stopPropagation(); move(-1); }} aria-label="Foto anterior" className="absolute left-3 p-3 text-ink-foreground"><ChevronLeft className="h-8 w-8" /></button>
-            <button onClick={(e) => { e.stopPropagation(); move(1); }} aria-label="Foto siguiente" className="absolute right-3 p-3 text-ink-foreground"><ChevronRight className="h-8 w-8" /></button>
+            <button onClick={(e) => { e.stopPropagation(); move(-1); }} aria-label={t("Foto anterior")} className="absolute left-3 p-3 text-ink-foreground"><ChevronLeft className="h-8 w-8" /></button>
+            <button onClick={(e) => { e.stopPropagation(); move(1); }} aria-label={t("Foto siguiente")} className="absolute right-3 p-3 text-ink-foreground"><ChevronRight className="h-8 w-8" /></button>
           </>}
-          <span className="absolute bottom-5 font-mono text-sm text-ink-foreground/80">{open + 1} / {n}</span>
+          <span className="absolute bottom-5 font-mono text-sm text-ink-foreground/80">{open + 1} / {t(n)}</span>
         </div>
       )}
     </div>
@@ -86,14 +88,15 @@ const visitSchema = z.object({
 });
 
 function VisitDialog({ p, open, onOpenChange }: { p: Property; open: boolean; onOpenChange: (o: boolean) => void }) {
+  const { t, language } = useLanguage();
   const [errors, setErrors] = useState<Record<string, string>>({});
   return (
     <Dialog open={open} onOpenChange={onOpenChange}>
       <DialogContent className="rounded-sm bg-card">
         <DialogHeader>
-          <p className="eyebrow">Agendar visita</p>
-          <DialogTitle className="font-display text-3xl font-normal">{p.name}</DialogTitle>
-          <DialogDescription>Elija cuándo le queda bien y Toto le confirma por WhatsApp.</DialogDescription>
+          <p className="eyebrow">{t("Agendar visita")}</p>
+          <DialogTitle className="font-display text-3xl font-normal">{t(p.name)}</DialogTitle>
+          <DialogDescription>{t("Elija cuándo le queda bien y Toto le confirma por WhatsApp.")}</DialogDescription>
         </DialogHeader>
         <form className="space-y-4" onSubmit={(e) => {
           e.preventDefault();
@@ -101,18 +104,18 @@ function VisitDialog({ p, open, onOpenChange }: { p: Property; open: boolean; on
           if (!r.success) { setErrors(Object.fromEntries(r.error.issues.map((i) => [String(i.path[0]), i.message]))); return; }
           setErrors({});
           const when = new Date(r.data.fecha).toLocaleString("es-CO", { dateStyle: "full", timeStyle: "short" });
-          openWa(`Hola Toto, soy ${r.data.nombre} (${r.data.celular}). Quiero agendar una visita a "${p.name}" (${p.municipality}) el ${when}.`);
-          toast.success("Abrimos WhatsApp con su solicitud de visita.");
+          openWa(`Hola Toto, soy ${r.data.nombre} (${r.data.celular}). Quiero agendar una visita a "${t(p.name)}" (${p.municipality}) el ${when}.`);
+          toast.success(t("Abrimos WhatsApp con su solicitud de visita."));
           onOpenChange(false);
         }}>
           {([["nombre", "Nombre", "text"], ["celular", "Celular", "tel"], ["fecha", "Fecha y hora preferida", "datetime-local"]] as const).map(([k, l, t]) => (
             <label key={k} className="block">
-              <span className="field-label">{l}</span>
-              <input name={k} type={t} className={inputCls} />
-              {errors[k] && <span className="mt-1 block text-xs text-destructive">{errors[k]}</span>}
+              <span className="field-label">{t(l)}</span>
+              <input name={k} type={t(title)} className={inputCls} />
+              {errors[k] && <span className="mt-1 block text-xs text-destructive">{t(errors[k])}</span>}
             </label>
           ))}
-          <Button type="submit" className="w-full"><CalendarDays /> Enviar solicitud</Button>
+          <Button type="submit" className="w-full"><CalendarDays /> {t("Enviar solicitud")}</Button>
         </form>
       </DialogContent>
     </Dialog>
@@ -121,6 +124,7 @@ function VisitDialog({ p, open, onOpenChange }: { p: Property; open: boolean; on
 
 /* ---------- Lateral ---------- */
 function PdfCard({ p }: { p: Property }) {
+  const { t, language } = useLanguage();
   const [err, setErr] = useState("");
   return (
     <form className="border bg-card p-6" onSubmit={(e) => {
@@ -130,40 +134,41 @@ function PdfCard({ p }: { p: Property }) {
       setErr("");
       if (p.pdfUrl) {
         const a = document.createElement("a"); a.href = p.pdfUrl; a.download = ""; a.target = "_blank"; a.click();
-        toast.success("Descargando la ficha.");
+        toast.success(t("Descargando la ficha."));
       } else {
-        openWa(`Hola Toto, por favor envíeme la ficha técnica en PDF de "${p.name}" (${p.municipality}) a este WhatsApp: ${r.data}.`);
-        toast.success("Abrimos WhatsApp para pedir la ficha.");
+        openWa(`Hola Toto, por favor envíeme la ficha técnica en PDF de "${t(p.name)}" (${p.municipality}) a este WhatsApp: ${r.data}.`);
+        toast.success(t("Abrimos WhatsApp para pedir la ficha."));
       }
     }}>
-      <p className="eyebrow">Ficha técnica</p>
-      <h3 className="mt-2 text-2xl">Reciba la ficha en PDF</h3>
+      <p className="eyebrow">{t("Ficha técnica")}</p>
+      <h3 className="mt-2 text-2xl">{t("Reciba la ficha en PDF")}</h3>
       <label className="mt-4 block">
-        <span className="field-label">Su WhatsApp</span>
+        <span className="field-label">{t("Su WhatsApp")}</span>
         <input name="wa" type="tel" inputMode="tel" placeholder="300 000 0000" className={inputCls} aria-invalid={!!err} />
-        {err && <span className="mt-1 block text-xs text-destructive">{err}</span>}
+        {err && <span className="mt-1 block text-xs text-destructive">{t(err)}</span>}
       </label>
-      <Button type="submit" variant="outline" className="mt-4 w-full">Enviarme la ficha</Button>
+      <Button type="submit" variant="outline" className="mt-4 w-full">{t("Enviarme la ficha")}</Button>
     </form>
   );
 }
 
 function Sidebar({ p, onVisit }: { p: Property; onVisit: () => void }) {
+  const { t, language } = useLanguage();
   return (
     <aside className="space-y-4 lg:sticky lg:top-24">
       <div className="border bg-card p-6">
-        <p className="eyebrow">Precio</p>
-        <p className="mt-2 font-display text-4xl">{priceDisplay(p)}</p>
-        {p.priceNote && <p className="mt-1 text-sm text-muted-foreground">{p.priceNote}</p>}
+        <p className="eyebrow">{t("Precio")}</p>
+        <p className="mt-2 font-display text-4xl">{language === "en" && p.priceCOP ? `COP ${p.priceCOP.toLocaleString("en-US")}` : t(priceDisplay(p))}</p>
+        {p.priceNote && <p className="mt-1 text-sm text-muted-foreground">{t(p.priceNote)}</p>}
         <div className="mt-6 space-y-2">
-          <Button asChild className="w-full"><a href={whatsappLink(propertyMessage(p))} target="_blank" rel="noreferrer"><MessageCircle /> Preguntar por WhatsApp</a></Button>
-          <Button variant="outline" className="w-full" onClick={onVisit}><CalendarDays /> Agendar visita</Button>
+          <Button asChild className="w-full"><a href={whatsappLink(propertyMessage(p))} target="_blank" rel="noreferrer"><MessageCircle /> {t("Preguntar por WhatsApp")}</a></Button>
+          <Button variant="outline" className="w-full" onClick={onVisit}><CalendarDays /> {t("Agendar visita")}</Button>
         </div>
         <div className="mt-6 flex items-center gap-3 border-t pt-6">
           <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-primary font-display text-2xl text-gold-light" aria-hidden>T</span>
           <div>
             <p className="font-medium">Juan Carlos “Toto” Echeverry</p>
-            <p className="text-sm text-muted-foreground">Asesor · <span className="font-mono">{WHATSAPP_DISPLAY}</span></p>
+            <p className="text-sm text-muted-foreground">{t("Asesor ·")} <span className="font-mono">{WHATSAPP_DISPLAY}</span></p>
           </div>
         </div>
       </div>
@@ -174,6 +179,7 @@ function Sidebar({ p, onVisit }: { p: Property; onVisit: () => void }) {
 
 /* ---------- Página ---------- */
 export function PropertyDetail({ p }: { p: Property }) {
+  const { t, language } = useLanguage();
   const [visit, setVisit] = useState(false);
   const verified = p.distances.filter((d) => d.verified);
   const same = properties.filter((x) => x.municipality === p.municipality && x.id !== p.id);
@@ -183,9 +189,9 @@ export function PropertyDetail({ p }: { p: Property }) {
   return (
     <div className="pb-24 lg:pb-0">
       <div className="container-site py-8">
-        <nav aria-label="Ruta" className="mb-6 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
-          <Link to="/" hash="propiedades" className="text-gold hover:underline">← Todas las propiedades</Link>
-          <span>/</span><span>{p.municipality}</span><span>/</span><span className="text-foreground">{p.name}</span>
+        <nav aria-label={t("Ruta")} className="mb-6 flex flex-wrap items-center gap-2 text-sm text-muted-foreground">
+          <Link to="/" hash={t("propiedades")} className="text-gold hover:underline">{t("← Todas las propiedades")}</Link>
+          <span>/</span><span>{p.municipality}</span><span>/</span><span className="text-foreground">{t(p.name)}</span>
         </nav>
 
         <div className="grid gap-10 lg:grid-cols-[65fr_35fr]">
@@ -193,36 +199,36 @@ export function PropertyDetail({ p }: { p: Property }) {
             <Gallery p={p} />
 
             <p className="eyebrow mt-10">{p.tag.toUpperCase()} · {p.municipality}</p>
-            <h1 className="mt-3 text-5xl leading-tight md:text-6xl">{p.name}</h1>
-            <p className="mt-3 text-lg text-muted-foreground">{p.location}</p>
+            <h1 className="mt-3 text-5xl leading-tight md:text-6xl">{t(p.name)}</h1>
+            <p className="mt-3 text-lg text-muted-foreground">{t(p.location)}</p>
 
             <div className="mt-8 grid grid-cols-3 divide-x border-y">
               {p.keyStats.map((s) => (
-                <div key={s.label} className="px-4 py-5 first:pl-0">
-                  <div className="font-display text-xl md:text-3xl">{s.value}</div>
-                  <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground md:text-[11px]">{s.label}</div>
+                <div key={t(s.label)} className="px-4 py-5 first:pl-0">
+                  <div className="font-display text-xl md:text-3xl">{t(s.value)}</div>
+                  <div className="mt-1 text-[10px] font-semibold uppercase tracking-[0.12em] text-muted-foreground md:text-[11px]">{t(s.label)}</div>
                 </div>
               ))}
             </div>
 
             <div className="mt-8 space-y-4 text-lg leading-relaxed text-foreground/85">
-              {p.description.map((d, i) => <p key={i}>{d}</p>)}
+              {p.description.map((d, i) => <p key={i}>{t(d)}</p>)}
             </div>
 
             <section className="mt-14">
-              <p className="eyebrow">Datos técnicos · {p.name}</p>
-              <h2 className="mt-2 text-3xl">Tarjeta del inmueble</h2>
+              <p className="eyebrow">{t("Datos técnicos ·")} {t(p.name)}</p>
+              <h2 className="mt-2 text-3xl">{t("Tarjeta del inmueble")}</h2>
               <div className="mt-6 overflow-x-auto border">
                 <table className="w-full text-sm">
                   <thead className="bg-primary text-left text-[11px] uppercase tracking-[0.12em] text-primary-foreground">
-                    <tr><th className="px-4 py-3 font-semibold">Concepto</th><th className="px-4 py-3 text-right font-semibold">Dato</th><th className="px-4 py-3 font-semibold">Nota</th></tr>
+                    <tr><th className="px-4 py-3 font-semibold">{t("Concepto")}</th><th className="px-4 py-3 text-right font-semibold">{t("Dato")}</th><th className="px-4 py-3 font-semibold">{t("Nota")}</th></tr>
                   </thead>
                   <tbody className="bg-card">
                     {p.specs.map((s) => (
-                      <tr key={s.concepto} className="border-t">
-                        <td className="px-4 py-3">{s.concepto}</td>
-                        <td className={`px-4 py-3 text-right ${numeric(s.dato) ? "font-mono" : ""}`}>{s.dato}</td>
-                        <td className="px-4 py-3 text-muted-foreground">{s.nota ?? ""}</td>
+                      <tr key={t(s.concepto)} className="border-t">
+                        <td className="px-4 py-3">{t(s.concepto)}</td>
+                        <td className={`px-4 py-3 text-right ${numeric(s.dato) ? "font-mono" : ""}`}>{t(s.dato)}</td>
+                        <td className="px-4 py-3 text-muted-foreground">{t(s.nota ?? "")}</td>
                       </tr>
                     ))}
                   </tbody>
@@ -232,26 +238,26 @@ export function PropertyDetail({ p }: { p: Property }) {
 
             {p.includes.length > 0 && (
               <section className="mt-14">
-                <h2 className="text-3xl">Lo que incluye</h2>
+                <h2 className="text-3xl">{t("Lo que incluye")}</h2>
                 <ul className="mt-6 grid gap-x-8 gap-y-3 sm:grid-cols-2">
-                  {p.includes.map((x) => <li key={x} className="flex gap-3"><span className="text-gold" aria-hidden>—</span>{x}</li>)}
+                  {p.includes.map((x) => <li key={t(x)} className="flex gap-3"><span className="text-gold" aria-hidden>—</span>{t(x)}</li>)}
                 </ul>
               </section>
             )}
 
             {verified.length > 0 && (
               <section className="mt-14">
-                <h2 className="text-3xl">Distancias aproximadas</h2>
+                <h2 className="text-3xl">{t("Distancias aproximadas")}</h2>
                 <ul className="mt-6 grid gap-x-10 gap-y-3 sm:grid-cols-2">
                   {verified.map((d) => (
-                    <li key={d.lugar} className="flex items-baseline gap-2">
-                      <span>{d.lugar}</span>
+                    <li key={t(d.lugar)} className="flex items-baseline gap-2">
+                      <span>{t(d.lugar)}</span>
                       <span className="flex-1 border-b border-dotted border-input" aria-hidden />
-                      <span className="font-mono text-sm text-gold">{d.tiempo}</span>
+                      <span className="font-mono text-sm text-gold">{t(d.tiempo)}</span>
                     </li>
                   ))}
                 </ul>
-                <p className="mt-4 text-xs text-muted-foreground">Tiempos en carro, aproximados.</p>
+                <p className="mt-4 text-xs text-muted-foreground">{t("Tiempos en carro, aproximados.")}</p>
               </section>
             )}
           </div>
@@ -261,7 +267,7 @@ export function PropertyDetail({ p }: { p: Property }) {
 
         {related.length > 0 && (
           <section className="mt-20 border-t pt-14">
-            <h2 className="mb-8 text-3xl md:text-4xl">Otras propiedades en {same.length ? p.municipality : "la misma categoría"}</h2>
+            <h2 className="mb-8 text-3xl md:text-4xl">{t("Otras propiedades en")} {same.length ? p.municipality : "la misma categoría"}</h2>
             <div className="grid gap-6 sm:grid-cols-2 lg:grid-cols-3">{related.map((r) => <PropertyCard key={r.id} p={r} />)}</div>
           </section>
         )}
@@ -269,7 +275,7 @@ export function PropertyDetail({ p }: { p: Property }) {
 
       <div className="fixed inset-x-0 bottom-0 z-50 flex gap-2 border-t bg-background p-3 lg:hidden">
         <Button asChild className="flex-1"><a href={whatsappLink(propertyMessage(p))} target="_blank" rel="noreferrer"><MessageCircle /> WhatsApp</a></Button>
-        <Button variant="outline" className="flex-1" onClick={() => setVisit(true)}>Agendar visita</Button>
+        <Button variant="outline" className="flex-1" onClick={() => setVisit(true)}>{t("Agendar visita")}</Button>
       </div>
 
       <VisitDialog p={p} open={visit} onOpenChange={setVisit} />

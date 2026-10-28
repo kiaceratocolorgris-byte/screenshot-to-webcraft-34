@@ -1,8 +1,9 @@
 import { useState } from "react";
 import { useRouterState } from "@tanstack/react-router";
-import { Menu, X, MessageCircle } from "lucide-react";
+import { Menu, X } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { whatsappLink as waLink } from "@/data/properties";
+import { WhatsAppIcon } from "@/components/site/WhatsAppIcon";
 import totoLogo from "@/assets/toto-logo-compact.jpg.asset.json";
 
 const NAV = [
@@ -13,8 +14,6 @@ const NAV = [
   ["Contacto", "contacto"],
 ] as const;
 
-const WA_BTN =
-  "border border-header-foreground bg-header-foreground text-header hover:bg-header-foreground/85 hover:text-header";
 
 export const WA_DEFAULT = "Hola Toto, vi su portafolio y quiero más información.";
 
@@ -40,14 +39,6 @@ export function Header() {
           ))}
         </nav>
         <div className="flex items-center gap-2">
-          <Button asChild className={`hidden sm:inline-flex ${WA_BTN}`}>
-            <a href={waLink(WA_DEFAULT)} target="_blank" rel="noreferrer">
-              <MessageCircle /> WhatsApp
-            </a>
-          </Button>
-          <Button asChild size="icon" className={`sm:hidden ${WA_BTN}`} aria-label="WhatsApp">
-            <a href={waLink(WA_DEFAULT)} target="_blank" rel="noreferrer"><MessageCircle /></a>
-          </Button>
           <Button variant="ghost" size="icon" className="text-header-foreground hover:bg-header-foreground/10 hover:text-header-foreground lg:hidden" onClick={() => setOpen(!open)} aria-label="Menú" aria-expanded={open}>
             {open ? <X /> : <Menu />}
           </Button>
@@ -77,7 +68,7 @@ export function WhatsAppFab() {
       aria-label="Escribir a Toto por WhatsApp"
       className="fixed bottom-5 right-5 z-50 grid h-14 w-14 place-items-center rounded-full bg-primary text-primary-foreground shadow-lg transition-transform duration-200 hover:scale-105"
     >
-      <MessageCircle className="h-6 w-6" />
+      <WhatsAppIcon className="h-7 w-7" />
     </a>
   );
 }

@@ -16,7 +16,7 @@ const fillBuyer = (form: HTMLFormElement) => {
   fireEvent.input(within(form).getByLabelText("Nombre"), { target: { value: "Ana Prueba" } });
   fireEvent.input(within(form).getByLabelText("Celular"), { target: { value: "3000000000" } });
   const presupuesto = within(form).getByLabelText("Presupuesto") as HTMLSelectElement;
-  fireEvent.change(presupuesto, { target: { value: presupuesto.options[1].value } });
+  fireEvent.change(presupuesto, { target: { value: presupuesto.options[1]?.value ?? "" } });
   fireEvent.click(within(form).getByRole("button", { name: "Enviar a Toto" }));
 };
 

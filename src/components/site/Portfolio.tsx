@@ -59,7 +59,7 @@ export function Portfolio() {
   const { t, language } = useLanguage();
   const { results } = useFilters();
   return (
-    <section id={t("propiedades")} className="py-24">
+    <section id="propiedades" className="py-24">
       <div className="container-site">
         <Reveal>
           <SectionHead eyebrow={t("Portafolio")} title={t("Propiedades seleccionadas")} aside={t("Cada propiedad tiene su propia página, con fotos, datos técnicos y un botón que le escribe a Toto con el nombre del lote ya incluido.")} />

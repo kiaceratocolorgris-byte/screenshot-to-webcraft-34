@@ -27,7 +27,7 @@ const ownerSchema = z.object({
 const inputCls = "mt-1 w-full rounded-sm border bg-field px-3 py-2.5 text-sm focus:border-gold focus:outline-none";
 
 function Field({ label, error, children }: { label: string; error?: string | undefined; children: ReactNode }) {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   return (
     <label className="block">
       <span className="field-label">{label}</span>
@@ -44,7 +44,7 @@ function submitLead(msg: string, success: string) {
 }
 
 function BuyerForm() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const { register, handleSubmit, formState: { errors }, reset } = useForm<z.infer<typeof buyerSchema>>({ resolver: zodResolver(buyerSchema), defaultValues: { objetivo: "Vivir", presupuesto: "" } });
   return (
     <form className="flex flex-1 flex-col gap-4" onSubmit={handleSubmit((d) => {
@@ -70,7 +70,7 @@ function BuyerForm() {
 }
 
 function OwnerForm() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const { register, handleSubmit, formState: { errors }, reset } = useForm<z.infer<typeof ownerSchema>>({ resolver: zodResolver(ownerSchema), defaultValues: { tipo: "Lote" } });
   return (
     <form className="flex flex-1 flex-col gap-4" onSubmit={handleSubmit((d) => {
@@ -90,7 +90,7 @@ function OwnerForm() {
 }
 
 export function ContactForms() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   return (
     <section id="contacto" className="py-24">
       <div className="container-site grid gap-6 lg:grid-cols-2">

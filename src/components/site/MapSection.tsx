@@ -11,7 +11,7 @@ const TOWNS: [string, number, number][] = [
 ];
 
 export function MapSection() {
-  const { t, language } = useLanguage();
+  const { t } = useLanguage();
   const [hover, setHover] = useState<number | null>(null);
   const onMap = properties.filter((p) => p.showOnMap && mapPositions[p.slug]);
   return (
@@ -29,11 +29,12 @@ export function MapSection() {
               <path d="M12 28 L14 58" fill="none" strokeWidth="0.6" strokeDasharray="1.5 1" />
             </svg>
             {TOWNS.map(([n, x, y]) => (
-              <span key={t(n)} className="absolute -translate-x-1/2 text-[11px] uppercase tracking-[0.12em] text-muted-foreground" style={{ left: `${t(x)}%`, top: `${y}%` }}>{t(n)}</span>
+              <span key={n} className="absolute -translate-x-1/2 text-[11px] uppercase tracking-[0.12em] text-muted-foreground" style={{ left: `${x}%`, top: `${y}%` }}>{t(n)}</span>
             ))}
             <span className="absolute -translate-x-1/2 -translate-y-1/2 border border-foreground bg-card px-2 py-1 font-mono text-[10px]" style={{ left: "60%", top: "34%" }}>✈ JMC</span>
             {onMap.map((p) => {
-              const pos = mapPositions[p.slug]!;
+              const pos = mapPositions[p.slug];
+              if (!pos) return null;
               return (
                 <Link key={p.id} to="/propiedad/$slug" params={{ slug: p.slug }}
                   onMouseEnter={() => setHover(p.id)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(p.id)} onBlur={() => setHover(null)}

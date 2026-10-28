@@ -3,9 +3,9 @@ import { useForm } from "react-hook-form";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { z } from "zod";
 import { toast } from "sonner";
-import type { ReactNode } from "react";
+import { useState, type ReactNode } from "react";
 import { Button } from "@/components/ui/button";
-import { whatsappLink as waLink } from "@/data/properties";
+import { submitContactLead } from "@/lib/contact-delivery";
 import { Reveal } from "./Reveal";
 
 const phone = z.string().trim().regex(/^[0-9 +]{7,15}$/, "Celular inválido");
@@ -37,20 +37,36 @@ function Field({ label, error, children }: { label: string; error?: string | und
   );
 }
 
-// Hoy se envía por WhatsApp; para migrar a Lovable Cloud reemplace esta función.
-function submitLead(msg: string, success: string) {
-  window.open(waLink(msg), "_blank", "noopener");
-  toast.success(success);
+function useLeadSubmission(category: "Compradores" | "Propietarios") {
+  const { t } = useLanguage();
+  const [status, setStatus] = useState<"idle" | "success" | "error">("idle");
+  const submit = async (fields: Record<string, string | undefined>, reset: () => void) => {
+    setStatus("idle");
+    try {
+      await submitContactLead(category, fields);
+      reset();
+      setStatus("success");
+      toast.success(t("Mensaje enviado"));
+    } catch {
+      setStatus("error");
+      toast.error(t("No se pudo enviar el mensaje. Intente de nuevo."));
+    }
+  };
+  return { submit, status };
+}
+
+function SubmissionStatus({ status }: { status: "idle" | "success" | "error" }) {
+  const { t } = useLanguage();
+  if (status === "idle") return null;
+  return <p role={status === "error" ? "alert" : "status"} className={`text-sm ${status === "error" ? "text-destructive" : "text-foreground"}`}>{t(status === "success" ? "Mensaje enviado" : "No se pudo enviar el mensaje. Intente de nuevo.")}</p>;
 }
 
 function BuyerForm() {
   const { t } = useLanguage();
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<z.infer<typeof buyerSchema>>({ resolver: zodResolver(buyerSchema), defaultValues: { objetivo: "Vivir", presupuesto: "" } });
+  const { submit, status } = useLeadSubmission("Compradores");
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<z.infer<typeof buyerSchema>>({ resolver: zodResolver(buyerSchema), defaultValues: { objetivo: "Vivir", presupuesto: "" } });
   return (
-    <form className="flex flex-1 flex-col gap-4" onSubmit={handleSubmit((d) => {
-      submitLead(`Hola Toto, soy ${d.nombre} (${d.celular}). Objetivo: ${d.objetivo}. Presupuesto: ${d.presupuesto}.${d.mensaje ? ` ${d.mensaje}` : ""}`, t("¡Listo! Abrimos WhatsApp con su mensaje para Toto."));
-      reset();
-    })}>
+    <form className="flex flex-1 flex-col gap-4" aria-busy={isSubmitting} onSubmit={handleSubmit((d) => submit(d, reset))}>
       <Field label={t("Nombre")} error={errors.nombre?.message ? t(errors.nombre.message) : undefined}><input className={inputCls} {...register("nombre")} /></Field>
       <Field label={t("Celular")} error={errors.celular?.message ? t(errors.celular.message) : undefined}><input className={inputCls} inputMode="tel" {...register("celular")} /></Field>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -64,19 +80,17 @@ function BuyerForm() {
         </Field>
       </div>
       <Field label={t("Mensaje")}><textarea rows={3} className={inputCls} {...register("mensaje")} /></Field>
-      <Button type="submit" className="mt-auto w-full">{t("Enviar a Toto")}</Button>
+      <div className="mt-auto space-y-3"><SubmissionStatus status={status} /><Button type="submit" disabled={isSubmitting} className="w-full">{t(isSubmitting ? "Enviando…" : "Enviar a Toto")}</Button></div>
     </form>
   );
 }
 
 function OwnerForm() {
   const { t } = useLanguage();
-  const { register, handleSubmit, formState: { errors }, reset } = useForm<z.infer<typeof ownerSchema>>({ resolver: zodResolver(ownerSchema), defaultValues: { tipo: "Lote" } });
+  const { submit, status } = useLeadSubmission("Propietarios");
+  const { register, handleSubmit, formState: { errors, isSubmitting }, reset } = useForm<z.infer<typeof ownerSchema>>({ resolver: zodResolver(ownerSchema), defaultValues: { tipo: "Lote" } });
   return (
-    <form className="flex flex-1 flex-col gap-4" onSubmit={handleSubmit((d) => {
-      submitLead(`Hola Toto, soy ${d.nombre} (${d.celular}). Quiero vender: ${d.tipo} en ${d.municipio}${d.area ? `, área aprox. ${d.area}` : ""}. Solicito avalúo.`, t("¡Listo! Abrimos WhatsApp con su mensaje para Toto."));
-      reset();
-    })}>
+    <form className="flex flex-1 flex-col gap-4" aria-busy={isSubmitting} onSubmit={handleSubmit((d) => submit(d, reset))}>
       <Field label={t("Nombre")} error={errors.nombre?.message ? t(errors.nombre.message) : undefined}><input className={inputCls} {...register("nombre")} /></Field>
       <Field label={t("Celular")} error={errors.celular?.message ? t(errors.celular.message) : undefined}><input className={inputCls} inputMode="tel" {...register("celular")} /></Field>
       <div className="grid gap-4 sm:grid-cols-2">
@@ -84,7 +98,7 @@ function OwnerForm() {
         <Field label={t("Municipio")} error={errors.municipio?.message ? t(errors.municipio.message) : undefined}><input className={inputCls} {...register("municipio")} /></Field>
       </div>
       <Field label={t("Área aproximada")}><input className={inputCls} placeholder={t("Ej. 3.000 m²")} {...register("area")} /></Field>
-      <Button type="submit" variant="outline" className="mt-auto w-full">{t("Solicitar avalúo")}</Button>
+      <div className="mt-auto space-y-3"><SubmissionStatus status={status} /><Button type="submit" variant="outline" disabled={isSubmitting} className="w-full">{t(isSubmitting ? "Enviando…" : "Solicitar avalúo")}</Button></div>
     </form>
   );
 }
@@ -97,7 +111,7 @@ export function ContactForms() {
         <Reveal className="flex flex-col border bg-card p-8">
           <p className="eyebrow mb-3">{t("Compradores")}</p>
           <h2 className="text-3xl md:text-4xl">{t("Cuénteme qué está buscando")}</h2>
-          <p className="mb-8 mt-3 text-muted-foreground">{t("Le respondo personalmente por WhatsApp el mismo día.")}</p>
+          <p className="mb-8 mt-3 text-muted-foreground">{t("Asesoría personal para encontrar la propiedad indicada.")}</p>
           <BuyerForm />
         </Reveal>
         <Reveal className="flex flex-col border bg-card p-8">

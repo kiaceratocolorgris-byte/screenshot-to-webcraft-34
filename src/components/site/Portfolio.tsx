@@ -2,7 +2,7 @@ import { useLanguage } from "@/lib/language";
 import { Link } from "@tanstack/react-router";
 import { MapPin } from "lucide-react";
 import { categoryLabels, priceDisplay, properties, type Category, type Property } from "@/data/properties";
-import { placeholderFor } from "@/data/images";
+import { coverFor, placeholderFor } from "@/data/images";
 import { useFilters } from "@/lib/filters";
 import { Reveal, SectionHead } from "./Reveal";
 import { SmartImage } from "./SmartImage";

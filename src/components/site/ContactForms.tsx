@@ -44,7 +44,7 @@ function submitLead(msg: string) {
 function BuyerForm() {
   const { register, handleSubmit, formState: { errors }, reset } = useForm<z.infer<typeof buyerSchema>>({ resolver: zodResolver(buyerSchema), defaultValues: { objetivo: "Vivir", presupuesto: "" } });
   return (
-    <form className="space-y-4" onSubmit={handleSubmit((d) => {
+    <form className="flex flex-1 flex-col gap-4" onSubmit={handleSubmit((d) => {
       submitLead(`Hola Toto, soy ${d.nombre} (${d.celular}). Objetivo: ${d.objetivo}. Presupuesto: ${d.presupuesto}.${d.mensaje ? ` ${d.mensaje}` : ""}`);
       reset();
     })}>
@@ -61,7 +61,7 @@ function BuyerForm() {
         </Field>
       </div>
       <Field label="Mensaje"><textarea rows={3} className={inputCls} {...register("mensaje")} /></Field>
-      <Button type="submit" className="w-full">Enviar a Toto</Button>
+      <Button type="submit" className="mt-auto w-full">Enviar a Toto</Button>
     </form>
   );
 }
@@ -69,7 +69,7 @@ function BuyerForm() {
 function OwnerForm() {
   const { register, handleSubmit, formState: { errors }, reset } = useForm<z.infer<typeof ownerSchema>>({ resolver: zodResolver(ownerSchema), defaultValues: { tipo: "Lote" } });
   return (
-    <form className="space-y-4" onSubmit={handleSubmit((d) => {
+    <form className="flex flex-1 flex-col gap-4" onSubmit={handleSubmit((d) => {
       submitLead(`Hola Toto, soy ${d.nombre} (${d.celular}). Quiero vender: ${d.tipo} en ${d.municipio}${d.area ? `, área aprox. ${d.area}` : ""}. Solicito avalúo.`);
       reset();
     })}>
@@ -80,7 +80,7 @@ function OwnerForm() {
         <Field label="Municipio" error={errors.municipio?.message}><input className={inputCls} {...register("municipio")} /></Field>
       </div>
       <Field label="Área aproximada"><input className={inputCls} placeholder="Ej. 3.000 m²" {...register("area")} /></Field>
-      <Button type="submit" variant="outline" className="w-full">Solicitar avalúo</Button>
+      <Button type="submit" variant="outline" className="mt-auto w-full">Solicitar avalúo</Button>
     </form>
   );
 }
@@ -89,13 +89,13 @@ export function ContactForms() {
   return (
     <section id="contacto" className="py-24">
       <div className="container-site grid gap-6 lg:grid-cols-2">
-        <Reveal className="border bg-card p-8">
+        <Reveal className="flex flex-col border bg-card p-8">
           <p className="eyebrow mb-3">Compradores</p>
           <h2 className="text-3xl md:text-4xl">Cuénteme qué está buscando</h2>
           <p className="mb-8 mt-3 text-muted-foreground">Le respondo personalmente por WhatsApp el mismo día.</p>
           <BuyerForm />
         </Reveal>
-        <Reveal className="border bg-card p-8">
+        <Reveal className="flex flex-col border bg-card p-8">
           <p className="eyebrow mb-3">Propietarios</p>
           <h2 className="text-3xl md:text-4xl">¿Quiere vender su propiedad?</h2>
           <p className="mb-8 mt-3 text-muted-foreground">Avalúo comercial orientativo y estrategia de venta con fotos con dron y pauta digital.</p>

@@ -5,6 +5,7 @@ import { Button } from "@/components/ui/button";
 import { whatsappLink as waLink } from "@/data/properties";
 import { WhatsAppIcon } from "@/components/site/WhatsAppIcon";
 import totoLogo from "@/assets/toto-logo-compact.jpg.asset.json";
+import { useLanguage } from "@/lib/language";
 
 const NAV = [
   ["Propiedades", "propiedades"],
@@ -27,6 +28,7 @@ export function Logo() {
 
 export function Header() {
   const [open, setOpen] = useState(false);
+  const { language, setLanguage, t } = useLanguage();
   return (
     <header className="sticky top-0 z-40 border-b border-header-foreground/15 bg-header">
       <div className="container-site flex h-[88px] items-center justify-between gap-4">
@@ -34,11 +36,16 @@ export function Header() {
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Principal">
           {NAV.map(([l, id]) => (
             <a key={id} href={`/#${id}`} className="text-sm text-header-foreground/80 transition-colors hover:text-header-foreground">
-              {l}
+              {t(l)}
             </a>
           ))}
         </nav>
         <div className="flex items-center gap-2">
+          <div role="group" aria-label={t("Idioma")} className="flex shrink-0 items-center text-header-foreground">
+            <Button variant="ghost" size="sm" onClick={() => setLanguage("en")} aria-label="English" aria-pressed={language === "en"} className={`h-9 gap-1 px-1.5 text-xs text-header-foreground hover:bg-header-foreground/10 hover:text-header-foreground sm:px-2 sm:text-sm ${language === "en" ? "underline underline-offset-4" : "opacity-70"}`}><span aria-hidden="true">🇺🇸</span> EN</Button>
+            <span aria-hidden="true" className="text-header-foreground/50">/</span>
+            <Button variant="ghost" size="sm" onClick={() => setLanguage("es")} aria-label="Español" aria-pressed={language === "es"} className={`h-9 gap-1 px-1.5 text-xs text-header-foreground hover:bg-header-foreground/10 hover:text-header-foreground sm:px-2 sm:text-sm ${language === "es" ? "underline underline-offset-4" : "opacity-70"}`}><span aria-hidden="true">🇪🇸</span> ESP</Button>
+          </div>
           <Button variant="ghost" size="icon" className="text-header-foreground hover:bg-header-foreground/10 hover:text-header-foreground lg:hidden" onClick={() => setOpen(!open)} aria-label="Menú" aria-expanded={open}>
             {open ? <X /> : <Menu />}
           </Button>
@@ -48,7 +55,7 @@ export function Header() {
         <nav className="border-t border-header-foreground/15 bg-header lg:hidden" aria-label="Móvil">
           {NAV.map(([l, id]) => (
             <a key={id} href={`/#${id}`} onClick={() => setOpen(false)} className="container-site block border-b border-header-foreground/15 py-4 font-display text-lg text-header-foreground">
-              {l}
+              {t(l)}
             </a>
           ))}
         </nav>

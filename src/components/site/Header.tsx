@@ -3,7 +3,7 @@ import { useRouterState } from "@tanstack/react-router";
 import { Menu, X, MessageCircle } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { whatsappLink as waLink } from "@/data/properties";
-import totoLogo from "@/assets/toto-logo-original.png.asset.json";
+import totoLogo from "@/assets/toto-logo-compact.jpg.asset.json";
 
 const NAV = [
   ["Propiedades", "propiedades"],
@@ -18,7 +18,7 @@ export const WA_DEFAULT = "Hola Toto, vi su portafolio y quiero más informació
 export function Logo() {
   return (
     <a href="/" className="flex items-center gap-3" aria-label="Toto Partner Inmobiliario, inicio">
-      <img src={totoLogo.url} alt="Totogolf · Partner inmobiliario" width={475} height={475} className="h-16 w-16 shrink-0 object-contain" />
+      <img src={totoLogo.url} alt="Totogolf · Partner inmobiliario" width={402} height={150} className="h-auto w-[180px] shrink-0 object-contain sm:w-[216px]" />
     </a>
   );
 }
@@ -27,7 +27,7 @@ export function Header() {
   const [open, setOpen] = useState(false);
   return (
     <header className="sticky top-0 z-40 border-b bg-card">
-      <div className="container-site flex h-[72px] items-center justify-between gap-4">
+      <div className="container-site flex h-[88px] items-center justify-between gap-4">
         <Logo />
         <nav className="hidden items-center gap-7 lg:flex" aria-label="Principal">
           {NAV.map(([l, id]) => (

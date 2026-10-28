@@ -2,7 +2,7 @@ import { useLanguage } from "@/lib/language";
 import { Link } from "@tanstack/react-router";
 import { MapPin } from "lucide-react";
 import { categoryLabels, priceDisplay, properties, type Category, type Property } from "@/data/properties";
-import { placeholderFor } from "@/data/images";
+import { coverFor, placeholderFor } from "@/data/images";
 import { useFilters } from "@/lib/filters";
 import { Reveal, SectionHead } from "./Reveal";
 import { SmartImage } from "./SmartImage";
@@ -12,7 +12,7 @@ export function PropertyCard({ p }: { p: Property }) {
   return (
     <Link to="/propiedad/$slug" params={{ slug: p.slug }} className="group flex flex-col border bg-card">
       <div className="relative aspect-[4/3] overflow-hidden">
-        <SmartImage src={p.cover || placeholderFor(p)} fallback={placeholderFor(p)} alt={t(p.name)} width={1024} height={768} wrapperClassName="h-full w-full" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" />
+        <SmartImage src={coverFor(p)} fallback={placeholderFor(p)} alt={t(p.name)} width={1024} height={768} wrapperClassName="h-full w-full" className="h-full w-full object-cover transition-transform duration-300 group-hover:scale-[1.03]" />
         <span className="absolute left-3 top-3 bg-card px-2 py-1 text-[10px] font-semibold uppercase tracking-[0.14em]">{t(p.tag)}</span>
       </div>
       <div className="flex flex-1 flex-col p-5">

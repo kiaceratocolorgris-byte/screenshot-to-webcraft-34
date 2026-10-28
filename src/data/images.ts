@@ -1,5 +1,7 @@
-// Rutas centralizadas de imágenes provisionales. Cuando suba las fotos reales a
-// public/images/<slug>/, las rutas de properties.ts (cover / images) se usan automáticamente.
+// Mapa de fotos reales por propiedad (slug = mismo slug de src/data/properties.ts).
+// cover = primera foto. images = galería completa (incluye la portada).
+// planos = planos de apartamentos (guardados, sin mostrar por ahora).
+// Las propiedades sin entrada aquí siguen con imágenes provisionales por categoría.
 import hero from "@/assets/hero.jpg";
 import totoAsset from "@/assets/toto.png.asset.json";
 import lote from "@/assets/lote.jpg";
@@ -10,6 +12,110 @@ import finca from "@/assets/finca.jpg";
 import type { Category, Property } from "./properties";
 
 export const images = { hero, toto: totoAsset.url, lote, apto, bodega, interior, finca };
+
+export interface PropertyPhotos { cover: string; images: string[]; planos?: string[]; }
+
+export const propertyImages: Record<string, PropertyPhotos> = {
+  "altos-de-bracamonte": {
+    cover: "/images/altos-de-bracamonte/1.jpg",
+    images: [
+      "/images/altos-de-bracamonte/1.jpg",
+      "/images/altos-de-bracamonte/2.jpg",
+    ],
+  },
+  "hacienda-flandes": {
+    cover: "/images/hacienda-flandes/1.jpg",
+    images: [
+      "/images/hacienda-flandes/1.jpg",
+      "/images/hacienda-flandes/2.jpg",
+      "/images/hacienda-flandes/3.jpg",
+      "/images/hacienda-flandes/4.jpg",
+      "/images/hacienda-flandes/5.jpg",
+    ],
+  },
+  "la-trinidad": {
+    cover: "/images/la-trinidad/1.jpg",
+    images: [
+      "/images/la-trinidad/1.jpg",
+      "/images/la-trinidad/2.jpg",
+      "/images/la-trinidad/3.jpg",
+      "/images/la-trinidad/4.jpg",
+    ],
+  },
+  "llanogrande-hills": {
+    cover: "/images/llanogrande-hills/1.jpg",
+    images: [
+      "/images/llanogrande-hills/1.jpg",
+      "/images/llanogrande-hills/2.jpg",
+      "/images/llanogrande-hills/3.jpg",
+      "/images/llanogrande-hills/4.jpg",
+      "/images/llanogrande-hills/5.jpg",
+      "/images/llanogrande-hills/6.jpg",
+    ],
+  },
+  "montemadero": {
+    cover: "/images/montemadero/1.jpg",
+    images: [
+      "/images/montemadero/1.jpg",
+      "/images/montemadero/2.jpg",
+      "/images/montemadero/3.jpg",
+      "/images/montemadero/4.jpg",
+      "/images/montemadero/5.jpg",
+    ],
+  },
+  "horizontes-territorio-campestre": {
+    cover: "/images/horizontes-territorio-campestre/1.jpg",
+    images: [
+      "/images/horizontes-territorio-campestre/1.jpg",
+      "/images/horizontes-territorio-campestre/2.jpg",
+      "/images/horizontes-territorio-campestre/3.jpg",
+    ],
+  },
+  "reservas-de-juanito-laguna": {
+    cover: "/images/reservas-de-juanito-laguna/1.jpg",
+    images: [
+      "/images/reservas-de-juanito-laguna/1.jpg",
+      "/images/reservas-de-juanito-laguna/2.jpg",
+      "/images/reservas-de-juanito-laguna/3.jpg",
+      "/images/reservas-de-juanito-laguna/4.jpg",
+      "/images/reservas-de-juanito-laguna/5.jpg",
+      "/images/reservas-de-juanito-laguna/6.jpg",
+    ],
+  },
+  "riveras-del-tambo": {
+    cover: "/images/riveras-del-tambo/1.jpg",
+    images: [
+      "/images/riveras-del-tambo/1.jpg",
+      "/images/riveras-del-tambo/2.jpg",
+      "/images/riveras-del-tambo/3.jpg",
+      "/images/riveras-del-tambo/4.jpg",
+      "/images/riveras-del-tambo/5.jpg",
+      "/images/riveras-del-tambo/6.jpg",
+      "/images/riveras-del-tambo/7.jpg",
+      "/images/riveras-del-tambo/8.jpg",
+    ],
+    planos: [
+      "/images/riveras-del-tambo/planos/1.jpg",
+      "/images/riveras-del-tambo/planos/2.jpg",
+      "/images/riveras-del-tambo/planos/3.jpg",
+      "/images/riveras-del-tambo/planos/4.jpg",
+      "/images/riveras-del-tambo/planos/5.jpg",
+      "/images/riveras-del-tambo/planos/6.jpg",
+      "/images/riveras-del-tambo/planos/7.jpg",
+      "/images/riveras-del-tambo/planos/8.jpg",
+    ],
+  },
+  "serranias-de-fizebad": {
+    cover: "/images/serranias-de-fizebad/1.jpg",
+    images: [
+      "/images/serranias-de-fizebad/1.jpg",
+      "/images/serranias-de-fizebad/2.jpg",
+      "/images/serranias-de-fizebad/3.jpg",
+      "/images/serranias-de-fizebad/4.jpg",
+      "/images/serranias-de-fizebad/5.jpg",
+    ],
+  },
+};
 
 const byCategory: Record<Category, string[]> = {
   "lotes-campestres": [lote, hero, finca],
@@ -25,9 +131,12 @@ export const placeholderFor = (p: Property, i = 0) => {
   return list[(p.id + i) % list.length]!;
 };
 
-/** Galería: cover + images; si faltan, completa con provisionales. */
+/** Portada: foto real si la propiedad está en propertyImages; si no, su cover o provisional. */
+export const coverFor = (p: Property) => propertyImages[p.slug]?.cover ?? p.cover ?? placeholderFor(p);
+
+/** Galería: fotos reales si existen en propertyImages; si no, cover + provisionales. */
 export const galleryFor = (p: Property) => {
-  const real = [p.cover, ...p.images].filter(Boolean);
+  const real = propertyImages[p.slug]?.images ?? [p.cover, ...p.images].filter(Boolean);
   const unique = Array.from(new Set(real));
   const out = unique.map((src, i) => ({ src, fallback: placeholderFor(p, i) }));
   for (let i = out.length; i < 3; i++) out.push({ src: placeholderFor(p, i), fallback: placeholderFor(p, i) });

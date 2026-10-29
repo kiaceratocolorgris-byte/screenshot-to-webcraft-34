@@ -747,7 +747,7 @@ export const properties: Property[] = [
     ],
     distances: [],
     showOnMap: true,
-    pdfUrl: "",
+    pdfUrl: "/fichas/casa-finca-ojo-de-agua.pdf",
     cover: "/images/casa-finca-ojo-de-agua/1.jpg",
     images: [],
   },

@@ -1,7 +1,7 @@
 import { useLanguage } from "@/lib/language";
 import { useCallback, useEffect, useState } from "react";
 import { Link } from "@tanstack/react-router";
-import { CalendarDays, ChevronLeft, ChevronRight, MessageCircle, X } from "lucide-react";
+import { CalendarDays, ChevronLeft, ChevronRight, Download, MessageCircle, X } from "lucide-react";
 import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
@@ -129,31 +129,26 @@ function VisitDialog({ p, open, onOpenChange }: { p: Property; open: boolean; on
 
 /* ---------- Lateral ---------- */
 function PdfCard({ p }: { p: Property }) {
-  const { t, language } = useLanguage();
-  const [err, setErr] = useState("");
+  const { t } = useLanguage();
   return (
-    <form className="border bg-card p-6" onSubmit={(e) => {
-      e.preventDefault();
-      const r = coPhone.safeParse(String(new FormData(e.currentTarget).get("wa") ?? ""));
-      if (!r.success) { setErr(r.error.issues[0]?.message ?? "Ingrese un celular colombiano de 10 dígitos"); return; }
-      setErr("");
-      if (p.pdfUrl) {
-        const a = document.createElement("a"); a.href = p.pdfUrl; a.download = ""; a.target = "_blank"; a.click();
-        toast.success(t("Descargando la ficha."));
-      } else {
-        openWa(`Hola Toto, por favor envíeme la ficha técnica en PDF de "${t(p.name)}" (${p.municipality}) a este WhatsApp: ${r.data}.`);
-        toast.success(t("Abrimos WhatsApp para pedir la ficha."));
-      }
-    }}>
+    <div className="border bg-card p-6">
       <p className="eyebrow">{t("Ficha técnica")}</p>
-      <h3 className="mt-2 text-2xl">{t("Reciba la ficha en PDF")}</h3>
-      <label className="mt-4 block">
-        <span className="field-label">{t("Su WhatsApp")}</span>
-        <input name="wa" type="tel" inputMode="tel" placeholder="300 000 0000" className={inputCls} aria-invalid={!!err} />
-        {err && <span className="mt-1 block text-xs text-destructive">{t(err)}</span>}
-      </label>
-      <Button type="submit" variant="outline" className="mt-4 w-full">{t("Enviarme la ficha")}</Button>
-    </form>
+      <h3 className="mt-2 text-2xl">{t("Descargue la ficha en PDF")}</h3>
+      <p className="mt-1 text-sm text-muted-foreground">{t("Fotos, datos técnicos y ubicación en un solo documento.")}</p>
+      {p.pdfUrl ? (
+        <Button asChild className="mt-4 w-full">
+          <a href={p.pdfUrl} download={`Ficha-${p.slug}-Toto-Partner.pdf`}>
+            <Download /> {t("Descargar ficha PDF")}
+          </a>
+        </Button>
+      ) : (
+        <Button variant="outline" asChild className="mt-4 w-full">
+          <a href={whatsappLink(`Hola Toto, ¿me puede enviar la ficha de "${t(p.name)}"?`)} target="_blank" rel="noreferrer">
+            <MessageCircle /> {t("Pedir la ficha por WhatsApp")}
+          </a>
+        </Button>
+      )}
+    </div>
   );
 }
 

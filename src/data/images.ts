@@ -10,7 +10,7 @@ import interior from "@/assets/interior.jpg";
 import finca from "@/assets/finca.jpg";
 import type { Category, Property } from "./properties";
 
-export const images = { hero, toto: totoAsset.url, lote, apto, bodega, interior, finca };
+export const images = { hero, toto: totoAsset.url, apto, bodega, interior, finca };
 
 export interface PropertyPhotos { cover: string; images: string[]; planos?: string[]; }
 

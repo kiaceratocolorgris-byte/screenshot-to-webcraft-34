@@ -173,6 +173,16 @@ export const propertyImages: Record<string, PropertyPhotos> = {
       "/images/lote-28-la-montana/8.jpg",
       "/images/lote-28-la-montana/9.jpg",
       "/images/lote-28-la-montana/10.jpg",
+      "/images/lote-28-la-montana/11.jpg",
+      "/images/lote-28-la-montana/12.jpg",
+      "/images/lote-28-la-montana/13.jpg",
+      "/images/lote-28-la-montana/14.jpg",
+      "/images/lote-28-la-montana/15.jpg",
+      "/images/lote-28-la-montana/16.jpg",
+      "/images/lote-28-la-montana/17.jpg",
+      "/images/lote-28-la-montana/18.jpg",
+      "/images/lote-28-la-montana/19.jpg",
+      "/images/lote-28-la-montana/20.jpg",
     ],
   },
   "montemadero": {
@@ -278,9 +288,11 @@ export const coverFor = (p: Property) => propertyImages[p.slug]?.cover ?? p.cove
 
 /** Galería: fotos reales si existen en propertyImages; si no, cover + provisionales. */
 export const galleryFor = (p: Property) => {
-  const real = propertyImages[p.slug]?.images ?? [p.cover, ...p.images].filter(Boolean);
+  const entry = propertyImages[p.slug];
+  const real = entry?.images ?? [p.cover, ...p.images].filter(Boolean);
   const unique = Array.from(new Set(real));
-  const out = unique.map((src, i) => ({ src, fallback: placeholderFor(p, i) }));
-  for (let i = out.length; i < 3; i++) out.push({ src: placeholderFor(p, i), fallback: placeholderFor(p, i) });
+  // Con fotos reales, el respaldo es la misma foto real: nunca una imagen generada.
+  const out = unique.map((src, i) => ({ src, fallback: entry ? src : placeholderFor(p, i) }));
+  if (!entry) for (let i = out.length; i < 3; i++) out.push({ src: placeholderFor(p, i), fallback: placeholderFor(p, i) });
   return out;
 };

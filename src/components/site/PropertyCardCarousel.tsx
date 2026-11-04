@@ -9,8 +9,10 @@ const MAX_PHOTOS = 6;
 /** Fotos del carrusel de la tarjeta: hasta 6 de propertyImages; si no hay, solo la portada. */
 function photosFor(p: Property): { src: string; fallback: string }[] {
   const real = propertyImages[p.slug]?.images;
-  const list = real && real.length > 0 ? real.slice(0, MAX_PHOTOS) : [p.cover ?? placeholderFor(p)];
-  return list.map((src, i) => ({ src, fallback: placeholderFor(p, i) }));
+  // Con fotos reales, el respaldo es la misma foto real: nunca una imagen generada.
+  if (real && real.length > 0) return real.slice(0, MAX_PHOTOS).map((src) => ({ src, fallback: src }));
+  const src = p.cover ?? placeholderFor(p);
+  return [{ src, fallback: placeholderFor(p) }];
 }
 
 /**

@@ -31,6 +31,21 @@ export const propertyImages: Record<string, PropertyPhotos> = {
       "/images/altos-de-bracamonte/10.jpg",
     ],
   },
+  "apartamento-envigado-mayorca": {
+    cover: "/images/apartamento-envigado-mayorca/1.jpg",
+    images: [
+      "/images/apartamento-envigado-mayorca/1.jpg",
+      "/images/apartamento-envigado-mayorca/2.jpg",
+      "/images/apartamento-envigado-mayorca/3.jpg",
+      "/images/apartamento-envigado-mayorca/4.jpg",
+      "/images/apartamento-envigado-mayorca/5.jpg",
+      "/images/apartamento-envigado-mayorca/6.jpg",
+      "/images/apartamento-envigado-mayorca/7.jpg",
+      "/images/apartamento-envigado-mayorca/8.jpg",
+      "/images/apartamento-envigado-mayorca/9.jpg",
+      "/images/apartamento-envigado-mayorca/10.jpg",
+    ],
+  },
   "casa-finca-ojo-de-agua": {
     cover: "/images/casa-finca-ojo-de-agua/1.jpg",
     images: [
@@ -100,6 +115,21 @@ export const propertyImages: Record<string, PropertyPhotos> = {
       "/images/horizontes-territorio-campestre/8.jpg",
     ],
   },
+  "la-campina": {
+    cover: "/images/la-campina/1.jpg",
+    images: [
+      "/images/la-campina/1.jpg",
+      "/images/la-campina/2.jpg",
+      "/images/la-campina/3.jpg",
+      "/images/la-campina/4.jpg",
+      "/images/la-campina/5.jpg",
+      "/images/la-campina/6.jpg",
+      "/images/la-campina/7.jpg",
+      "/images/la-campina/8.jpg",
+      "/images/la-campina/9.jpg",
+      "/images/la-campina/10.jpg",
+    ],
+  },
   "la-trinidad": {
     cover: "/images/la-trinidad/1.jpg",
     images: [
@@ -128,6 +158,21 @@ export const propertyImages: Record<string, PropertyPhotos> = {
       "/images/llanogrande-hills/8.jpg",
       "/images/llanogrande-hills/9.jpg",
       "/images/llanogrande-hills/10.jpg",
+    ],
+  },
+  "lote-28-la-montana": {
+    cover: "/images/lote-28-la-montana/1.jpg",
+    images: [
+      "/images/lote-28-la-montana/1.jpg",
+      "/images/lote-28-la-montana/2.jpg",
+      "/images/lote-28-la-montana/3.jpg",
+      "/images/lote-28-la-montana/4.jpg",
+      "/images/lote-28-la-montana/5.jpg",
+      "/images/lote-28-la-montana/6.jpg",
+      "/images/lote-28-la-montana/7.jpg",
+      "/images/lote-28-la-montana/8.jpg",
+      "/images/lote-28-la-montana/9.jpg",
+      "/images/lote-28-la-montana/10.jpg",
     ],
   },
   "montemadero": {
@@ -197,6 +242,19 @@ export const propertyImages: Record<string, PropertyPhotos> = {
       "/images/serranias-de-fizebad/6.jpg",
       "/images/serranias-de-fizebad/7.jpg",
       "/images/serranias-de-fizebad/8.jpg",
+    ],
+  },
+  "terreno-34-cuadras": {
+    cover: "/images/terreno-34-cuadras/1.jpg",
+    images: [
+      "/images/terreno-34-cuadras/1.jpg",
+      "/images/terreno-34-cuadras/2.jpg",
+      "/images/terreno-34-cuadras/3.jpg",
+      "/images/terreno-34-cuadras/4.jpg",
+      "/images/terreno-34-cuadras/5.jpg",
+      "/images/terreno-34-cuadras/6.jpg",
+      "/images/terreno-34-cuadras/7.jpg",
+      "/images/terreno-34-cuadras/8.jpg",
     ],
   },
 };

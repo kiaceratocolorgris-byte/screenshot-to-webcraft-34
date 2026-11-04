@@ -4,7 +4,6 @@
 // Las propiedades sin entrada aquí siguen con imágenes provisionales por categoría.
 import hero from "@/assets/hero.jpg";
 import totoAsset from "@/assets/toto.jpg.asset.json";
-import lote from "@/assets/lote.jpg";
 import apto from "@/assets/apto.jpg";
 import bodega from "@/assets/bodega.jpg";
 import interior from "@/assets/interior.jpg";
@@ -291,11 +290,11 @@ export const propertyImages: Record<string, PropertyPhotos> = {
 };
 
 const byCategory: Record<Category, string[]> = {
-  "lotes-campestres": [lote, hero, finca],
+  "lotes-campestres": [finca, hero, finca],
   apartamentos: [apto, interior, hero],
-  "bodegas-locales": [bodega, hero, lote],
-  "grandes-terrenos": [hero, lote, finca],
-  "casas-fincas": [finca, lote, hero],
+  "bodegas-locales": [bodega, hero, finca],
+  "grandes-terrenos": [hero, finca, finca],
+  "casas-fincas": [finca, finca, hero],
 };
 
 /** Imagen provisional según categoría (rota por id para dar variedad). */

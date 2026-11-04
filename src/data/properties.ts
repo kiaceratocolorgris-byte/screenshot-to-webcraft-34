@@ -698,7 +698,7 @@ export const properties: Property[] = [
     includes: ["Parcelación en Llanogrande", "Estrato 6"],
     distances: [],
     showOnMap: true,
-    pdfUrl: "", // pegar aquí el enlace de la ficha PDF cuando esté subida
+    pdfUrl: "/fichas/lote-27-reservas-de-avinon.pdf",
     cover: "/images/lote-27-reservas-de-avinon/1.jpg",
     images: [],
   },

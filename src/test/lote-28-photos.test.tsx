@@ -9,12 +9,11 @@ import bodega from "@/assets/bodega.jpg";
 import finca from "@/assets/finca.jpg";
 import hero from "@/assets/hero.jpg";
 import interior from "@/assets/interior.jpg";
-import lote from "@/assets/lote.jpg";
 
 const SLUG = "lote-28-la-montana";
 const PREFIX = `/images/${SLUG}/`;
 /** Imágenes generadas de relleno: ninguna debe aparecer en el Lote 28. */
-const GENERATED = [apto, bodega, finca, hero, interior, lote];
+const GENERATED = [apto, bodega, finca, hero, interior];
 
 const lote28 = properties.find((p) => p.slug === SLUG)!;
 

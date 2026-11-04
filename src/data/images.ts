@@ -4,14 +4,13 @@
 // Las propiedades sin entrada aquí siguen con imágenes provisionales por categoría.
 import hero from "@/assets/hero.jpg";
 import totoAsset from "@/assets/toto.jpg.asset.json";
-import lote from "@/assets/lote.jpg";
 import apto from "@/assets/apto.jpg";
 import bodega from "@/assets/bodega.jpg";
 import interior from "@/assets/interior.jpg";
 import finca from "@/assets/finca.jpg";
 import type { Category, Property } from "./properties";
 
-export const images = { hero, toto: totoAsset.url, lote, apto, bodega, interior, finca };
+export const images = { hero, toto: totoAsset.url, apto, bodega, interior, finca };
 
 export interface PropertyPhotos { cover: string; images: string[]; planos?: string[]; }
 
@@ -254,6 +253,27 @@ export const propertyImages: Record<string, PropertyPhotos> = {
       "/images/serranias-de-fizebad/8.jpg",
     ],
   },
+  "lote-27-reservas-de-avinon": {
+    cover: "/images/lote-27-reservas-de-avinon/1.jpg",
+    images: [
+      "/images/lote-27-reservas-de-avinon/1.jpg",
+      "/images/lote-27-reservas-de-avinon/2.jpg",
+      "/images/lote-27-reservas-de-avinon/3.jpg",
+      "/images/lote-27-reservas-de-avinon/4.jpg",
+      "/images/lote-27-reservas-de-avinon/5.jpg",
+      "/images/lote-27-reservas-de-avinon/6.jpg",
+      "/images/lote-27-reservas-de-avinon/7.jpg",
+      "/images/lote-27-reservas-de-avinon/8.jpg",
+      "/images/lote-27-reservas-de-avinon/9.jpg",
+      "/images/lote-27-reservas-de-avinon/10.jpg",
+      "/images/lote-27-reservas-de-avinon/11.jpg",
+      "/images/lote-27-reservas-de-avinon/12.jpg",
+      "/images/lote-27-reservas-de-avinon/13.jpg",
+      "/images/lote-27-reservas-de-avinon/14.jpg",
+      "/images/lote-27-reservas-de-avinon/15.jpg",
+      "/images/lote-27-reservas-de-avinon/16.jpg",
+    ],
+  },
   "terreno-34-cuadras": {
     cover: "/images/terreno-34-cuadras/1.jpg",
     images: [
@@ -270,11 +290,11 @@ export const propertyImages: Record<string, PropertyPhotos> = {
 };
 
 const byCategory: Record<Category, string[]> = {
-  "lotes-campestres": [lote, hero, finca],
+  "lotes-campestres": [finca, hero, finca],
   apartamentos: [apto, interior, hero],
-  "bodegas-locales": [bodega, hero, lote],
-  "grandes-terrenos": [hero, lote, finca],
-  "casas-fincas": [finca, lote, hero],
+  "bodegas-locales": [bodega, hero, finca],
+  "grandes-terrenos": [hero, finca, finca],
+  "casas-fincas": [finca, finca, hero],
 };
 
 /** Imagen provisional según categoría (rota por id para dar variedad). */

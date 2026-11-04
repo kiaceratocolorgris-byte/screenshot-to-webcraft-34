@@ -1,4 +1,5 @@
 # Tasks
+- [x] Add photos for lote-28-la-montana, apartamento-envigado-mayorca, terreno-34-cuadras and la-campina; verify portfolio cards, carousel and detail galleries.
 - [x] Replace photos for the 10 Serving Drive properties and verify portfolio cards and detail galleries show them.
 - [x] Make the "Mensaje enviado" confirmation large and displayed over the whole form.
 - [x] Connect buyer and owner contact forms to Formspree and verify accepted and failed submissions (real buyer request accepted; owner recovery checked with simulated responses).

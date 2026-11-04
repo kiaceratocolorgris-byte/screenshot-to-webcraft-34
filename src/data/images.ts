@@ -3,7 +3,7 @@
 // planos = planos de apartamentos (guardados, sin mostrar por ahora).
 // Las propiedades sin entrada aquí siguen con imágenes provisionales por categoría.
 import hero from "@/assets/hero.jpg";
-import totoAsset from "@/assets/toto.png.asset.json";
+import totoAsset from "@/assets/toto.jpg.asset.json";
 import lote from "@/assets/lote.jpg";
 import apto from "@/assets/apto.jpg";
 import bodega from "@/assets/bodega.jpg";

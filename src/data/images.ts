@@ -45,6 +45,21 @@ export const propertyImages: Record<string, PropertyPhotos> = {
       "/images/apartamento-envigado-mayorca/10.jpg",
     ],
   },
+  "apartamento-rosales-bogota": {
+    cover: "/images/apartamento-rosales-bogota/1.jpg",
+    images: [
+      "/images/apartamento-rosales-bogota/1.jpg",
+      "/images/apartamento-rosales-bogota/2.jpg",
+      "/images/apartamento-rosales-bogota/3.jpg",
+      "/images/apartamento-rosales-bogota/4.jpg",
+      "/images/apartamento-rosales-bogota/5.jpg",
+      "/images/apartamento-rosales-bogota/6.jpg",
+      "/images/apartamento-rosales-bogota/7.jpg",
+      "/images/apartamento-rosales-bogota/8.jpg",
+      "/images/apartamento-rosales-bogota/9.jpg",
+      "/images/apartamento-rosales-bogota/10.jpg",
+    ],
+  },
   "casa-finca-ojo-de-agua": {
     cover: "/images/casa-finca-ojo-de-agua/1.jpg",
     images: [

@@ -798,7 +798,7 @@ export const properties: Property[] = [
     ],
     distances: [],
     showOnMap: false, // Bogotá no entra en el mapa del Oriente
-    pdfUrl: "",
+    pdfUrl: "/fichas/apartamento-rosales-bogota.pdf",
     cover: "/images/apartamento-rosales-bogota/1.jpg",
     images: [],
   },

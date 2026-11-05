@@ -6,10 +6,11 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { WHATSAPP_DISPLAY, priceDisplay, properties, propertyMessage, whatsappLink, type Property } from "@/data/properties";
+import { priceDisplay, properties, propertyMessage, whatsappLink, type Property } from "@/data/properties";
 import { galleryFor } from "@/data/images";
 import { PropertyCard } from "./Portfolio";
 import { SmartImage } from "./SmartImage";
+import { AdvisorCard } from "./AdvisorCard";
 
 const openWa = (msg: string) => window.open(whatsappLink(msg), "_blank", "noopener");
 const inputCls = "mt-1 w-full rounded-sm border bg-field px-3 py-2.5 text-sm focus:border-gold focus:outline-none";
@@ -164,13 +165,7 @@ function Sidebar({ p, onVisit }: { p: Property; onVisit: () => void }) {
           <Button asChild className="w-full"><a href={whatsappLink(propertyMessage(p))} target="_blank" rel="noreferrer"><MessageCircle /> {t("Preguntar por WhatsApp")}</a></Button>
           <Button variant="outline" className="w-full" onClick={onVisit}><CalendarDays /> {t("Agendar visita")}</Button>
         </div>
-        <div className="mt-6 flex items-center gap-3 border-t pt-6">
-          <span className="grid h-12 w-12 shrink-0 place-items-center rounded-full bg-primary font-display text-2xl text-gold-light" aria-hidden>T</span>
-          <div>
-            <p className="font-medium">Juan Carlos “Toto” Echeverry</p>
-            <p className="text-sm text-muted-foreground">{t("Asesor ·")} <span className="font-mono">{WHATSAPP_DISPLAY}</span></p>
-          </div>
-        </div>
+        <AdvisorCard />
       </div>
       <PdfCard p={p} />
     </aside>

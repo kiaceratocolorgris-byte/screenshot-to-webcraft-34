@@ -4,6 +4,7 @@ type Municipio = string;
 import { images } from "@/data/images";
 import { scrollTo, useFilters } from "@/lib/filters";
 import { Reveal, SectionHead } from "./Reveal";
+import { InstagramIcon } from "./InstagramIcon";
 
 const ZONES: [Municipio, string][] = [
   ["El Retiro", "Bosque, clima frío y parcelaciones de baja densidad."],

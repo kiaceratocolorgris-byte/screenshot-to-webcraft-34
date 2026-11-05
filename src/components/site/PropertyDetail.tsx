@@ -6,7 +6,7 @@ import { toast } from "sonner";
 import { z } from "zod";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle } from "@/components/ui/dialog";
-import { WHATSAPP_DISPLAY, priceDisplay, properties, propertyMessage, whatsappLink, type Property } from "@/data/properties";
+import { priceDisplay, properties, propertyMessage, whatsappLink, type Property } from "@/data/properties";
 import { galleryFor } from "@/data/images";
 import { PropertyCard } from "./Portfolio";
 import { SmartImage } from "./SmartImage";

@@ -22,7 +22,8 @@ export function AdvisorCard() {
           alt="Juan Carlos “Toto” Echeverry"
           loading="lazy"
           onError={() => setFailed(true)}
-          className="h-12 w-12 shrink-0 rounded-full border-[1.5px] border-[#9C7A3C] object-cover object-[center_20%] sm:h-14 sm:w-14"
+          style={{ borderWidth: "1.5px", borderColor: "#9C7A3C" }}
+          className="h-12 w-12 shrink-0 rounded-full border-solid object-cover object-[center_20%] sm:h-14 sm:w-14"
         />
       )}
       <div>

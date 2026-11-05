@@ -4,6 +4,7 @@ type Municipio = string;
 import { images } from "@/data/images";
 import { scrollTo, useFilters } from "@/lib/filters";
 import { Reveal, SectionHead } from "./Reveal";
+import { InstagramIcon } from "./InstagramIcon";
 
 const ZONES: [Municipio, string][] = [
   ["El Retiro", "Bosque, clima frío y parcelaciones de baja densidad."],
@@ -143,7 +144,9 @@ export function Footer() {
         <div>
           <p className="eyebrow text-gold-mid">{t("WhatsApp y llamadas")}</p>
           <a href="tel:+573004517485" className="mt-3 block font-mono text-lg text-gold-light">300 451 7485</a>
-          <a href="https://instagram.com/totopartnerinmobiliario" target="_blank" rel="noreferrer" className="mt-2 block text-sm text-ink-foreground/70 hover:text-ink-foreground">Instagram: @totopartnerinmobiliario</a>
+          <a href="https://instagram.com/totopartnerinmobiliario" target="_blank" rel="noreferrer" aria-label="Instagram de Toto Partner Inmobiliario" className="mt-3 inline-block text-ink-foreground/70 transition-colors hover:text-ink-foreground">
+            <InstagramIcon className="h-7 w-7" />
+          </a>
         </div>
         <div>
           <p className="eyebrow text-gold-mid">{t("Respaldo")}</p>

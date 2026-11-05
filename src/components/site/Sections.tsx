@@ -144,9 +144,12 @@ export function Footer() {
         <div>
           <p className="eyebrow text-gold-mid">{t("WhatsApp y llamadas")}</p>
           <a href="tel:+573004517485" className="mt-3 block font-mono text-lg text-gold-light">300 451 7485</a>
-          <a href="https://instagram.com/totopartnerinmobiliario" target="_blank" rel="noreferrer" aria-label="Instagram de Toto Partner Inmobiliario" className="mt-3 inline-block text-ink-foreground/70 transition-colors hover:text-ink-foreground">
-            <InstagramIcon className="h-7 w-7" />
-          </a>
+          <div className="mt-3 flex items-center gap-2">
+            <a href="https://instagram.com/totopartnerinmobiliario" target="_blank" rel="noreferrer" aria-label="Instagram de Toto Partner Inmobiliario" className="inline-block transition-transform hover:scale-105">
+              <InstagramIcon className="h-7 w-7" />
+            </a>
+            <span className="text-sm text-ink-foreground/70">@totopartnerinmobiliario</span>
+          </div>
         </div>
         <div>
           <p className="eyebrow text-gold-mid">{t("Respaldo")}</p>
